@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Al Sharif LPG - Master ERP</title>
+    
+    <style>
+        /* ========================================================= */
+        /* 📱 PREMIUM MOBILE APP UI (BEAUTIFUL HEADINGS)             */
+        /* ========================================================= */
+        @import url('https://fonts.googleapis.com/css2?family=Jameel+Noori+Nastaleeq&family=Inter:wght@400;600;700;800&display=swap');
+
+        * { box-sizing: border-box; font-family: 'Inter', Tahoma, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+        .ur { font-family: 'Jameel Noori Nastaleeq', 'Nafees Web Naskh', Tahoma; font-size: 18px; }
+        .ur-bold { font-family: 'Jameel Noori Nastaleeq', 'Nafees Web Naskh', Tahoma; font-size: 20px; font-weight: bold; }
+        
+        body { margin: 0; padding: 0; background-color: #f1f5f9; color: #0f172a; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+        /* MAIN HEADER */
+        .app-header { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); color: white; padding: 20px 20px; text-align: center; box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3); z-index: 50; border-bottom: 3px solid #bfdbfe; }
+        .app-header h1 { margin: 0; font-size: 28px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); letter-spacing: 1px; }
+        
+        .main-content { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 100px; }
+        .app-screen { display: none; animation: fadeIn 0.3s ease; }
+        .app-screen.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* CARDS & BEAUTIFUL SECTION TITLES */
+        .card { background: #ffffff; border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+        
+        /* 🔥 Beautiful Card Title */
+        .card-title { 
+            background: linear-gradient(90deg, #1e3a8a, #2563eb); 
+            color: white; 
+            padding: 15px; 
+            border-radius: 10px; 
+            text-align: center; 
+            margin-top: -35px; 
+            margin-bottom: 20px; 
+            box-shadow: 0 8px 15px rgba(37, 99, 235, 0.2); 
+            font-size: 24px;
+            border: 2px solid #ffffff;
+        }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-size: 14px; font-weight: bold; color: #475569; margin-bottom: 8px; }
+        .form-group input, .form-group select { padding: 14px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 16px; font-weight: bold; background: #f8fafc; outline: none; transition: 0.3s; width: 100%; }
+        .form-group input:focus, .form-group select:focus { border-color: #3b82f6; background: #ffffff; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15); }
+        .auto-loaded { background: #dcfce7 !important; border-color: #86efac !important; color: #166534 !important; }
+
+        /* 🔥 Beautiful Sub-Section Headings */
+        .section-box { background:#f8fafc; border:1px solid #e2e8f0; padding:15px; border-radius:12px; margin-top:20px; position: relative; }
+        .section-title { 
+            background: #e2e8f0; color: #1e3a8a; 
+            padding: 6px 15px; border-radius: 6px; 
+            display: inline-block; font-weight: bold; 
+            margin-bottom: 15px; margin-top: -28px; 
+            border-right: 4px solid #1e3a8a;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .st-red { background: #fee2e2; color: #b91c1c; border-right-color: #b91c1c; }
+        .st-green { background: #dcfce7; color: #15803d; border-right-color: #15803d; }
+        .st-orange { background: #fef3c7; color: #b45309; border-right-color: #b45309; }
+
+        /* LIVE CALCULATION SUMMARY BOX */
+        .live-summary { background: #1e293b; color: white; border-radius: 12px; padding: 15px; margin-top: 15px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.5); }
+        .live-row { display: flex; justify-content: space-between; font-size: 16px; padding: 5px 0; border-bottom: 1px dashed #475569; }
+        .live-row.total { font-size: 22px; font-weight: bold; color: #4ade80; border: none; padding-top: 10px; margin-top: 5px; }
+        .live-row.total-red { color: #f87171; }
+
+        /* DUAL BUTTONS */
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .btn-pdf { padding: 15px; border: none; border-radius: 10px; color: white; font-weight: bold; font-size: 16px; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: 0.2s; text-align: center; }
+        .btn-pdf:active { transform: scale(0.95); }
+        .btn-urdu { background: linear-gradient(135deg, #16a34a, #15803d); box-shadow: 0 4px 10px rgba(22,163,74,0.3); }
+        .btn-eng { background: linear-gradient(135deg, #2563eb, #1d4ed8); box-shadow: 0 4px 10px rgba(37,99,235,0.3); font-family: 'Inter'; }
+
+        /* BOTTOM NAVIGATION */
+        .bottom-nav { background: #ffffff; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-around; padding: 10px 5px; position: fixed; bottom: 0; width: 100%; z-index: 50; box-shadow: 0 -4px 20px rgba(0,0,0,0.08); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #64748b; font-size: 13px; font-weight: bold; cursor: pointer; padding: 8px 20px; border-radius: 12px; transition: 0.3s; }
+        .nav-item.active { color: #2563eb; background: #eff6ff; transform: translateY(-5px); box-shadow: 0 4px 10px rgba(37,99,235,0.1); }
+        .nav-icon { font-size: 22px; margin-bottom: 2px; }
+
+        /* ========================================================= */
+        /* 🖨️ PRINT / PDF STYLES                                     */
+        /* ========================================================= */
+        #print-area { display: none; background: white; width: 100%; }
+        @media print {
+            body { background: white; padding: 0; margin: 0; height: auto; overflow: visible; }
+            .app-header, .bottom-nav, .main-content { display: none !important; }
+            #print-area { display: block !important; }
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            
+            /* URDU PDF */
+            .urdu-pdf { direction: rtl; padding: 20px; font-family: 'Jameel Noori Nastaleeq', Tahoma, sans-serif; }
+            .urdu-pdf .u-head { background: #284b8f; color: white; text-align: center; padding: 20px; border-radius: 4px 4px 0 0; }
+            .urdu-pdf .u-head.green { background: #16a34a; }
+            .urdu-pdf .u-head.purple { background: #7c3aed; }
+            .urdu-pdf .u-head h1 { font-size: 40px; margin: 0; }
+            .urdu-pdf .u-sec-title { color: #284b8f; font-size: 22px; font-weight: bold; border-right: 5px solid #ef4444; padding-right: 12px; margin: 30px 0 15px 0; }
+            .urdu-pdf .u-sec-title.green { color: #16a34a; border-right-color: #16a34a; }
+            .urdu-pdf .u-sec-title.purple { color: #7c3aed; border-right-color: #7c3aed; }
+            .urdu-pdf table { width: 100%; border-collapse: collapse; margin-bottom: 15px; text-align: center; }
+            .urdu-pdf th { border-bottom: 2px solid #cbd5e1; padding: 10px; font-size: 18px; }
+            .urdu-pdf td { border-bottom: 1px solid #e2e8f0; padding: 10px; font-size: 16px; }
+            .urdu-pdf .bg-light { background-color: #f8fafc; }
+            .urdu-pdf .text-red { color: #ef4444; font-weight: bold; }
+            .urdu-pdf .text-green { color: #16a34a; font-weight: bold; }
+            .urdu-pdf .summary-box { border: 2px solid #cbd5e1; border-radius: 8px; padding: 15px; margin-top: 25px; }
+            .urdu-pdf .sum-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed #cbd5e1; font-size: 18px; }
+            .urdu-pdf .sum-row.total { background: #284b8f; color: white; padding: 15px; font-weight: bold; border: none; font-size: 22px; margin-top: 15px; border-radius: 4px; }
+            .urdu-pdf .sum-row.total.green { background: #16a34a; }
+            .urdu-pdf .sum-row.total.purple { background: #7c3aed; }
+
+            /* ENGLISH PDF */
+            .eng-pdf { direction: ltr; padding: 20px; font-family: 'Inter', sans-serif; }
+            .eng-pdf .e-head { background: #1e3a8a; color: white; padding: 25px; border-bottom: 6px solid #d97706; }
+            .eng-pdf .e-head.green { background: #16a34a; border-bottom-color: #f59e0b; }
+            .eng-pdf .e-head h1 { font-size: 32px; margin: 0; font-weight: 800; }
+            .eng-pdf .e-sec-title { color: #1e3a8a; font-size: 16px; font-weight: 800; border-left: 5px solid #d97706; padding-left: 12px; margin: 35px 0 15px 0; text-transform: uppercase; }
+            .eng-pdf .e-sec-title.green { color: #16a34a; border-left-color: #f59e0b; }
+            .eng-pdf table { width: 100%; border-collapse: collapse; margin-bottom: 20px; text-align: left; }
+            .eng-pdf th { background: #1e3a8a; color: white; padding: 14px; font-size: 12px; }
+            .eng-pdf th.green { background: #16a34a; }
+            .eng-pdf td { border: 1px solid #e2e8f0; padding: 14px; font-size: 14px; }
+            .eng-pdf .recon-box { border: 2px solid #e2e8f0; padding: 20px; border-radius: 8px; width: 320px; float: right; margin-top: 10px; }
+            .eng-pdf .recon-row { display: flex; justify-content: space-between; padding: 10px 0; font-size: 14px; font-weight: bold; border-bottom: 1px dashed #cbd5e1; }
+            .eng-pdf .recon-row.total { background: #f0fdf4; border-bottom: none; font-size: 16px; margin-top: 10px; padding-top: 15px; }
+            .text-red { color: #dc2626; font-weight: bold; }
+            .text-green { color: #16a34a; font-weight: bold; }
+            .text-blue { color: #2563eb; font-weight: bold; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="app-header">
+        <h1 class="ur-bold">الشریف ایل پی جی سسٹم</h1>
+    </header>
+
+    <main class="main-content">
+        
+        <!-- ========================================== -->
+        <!-- 1. SHOP SCREEN (دکان کا کھاتہ)             -->
+        <!-- ========================================== -->
+        <div id="screen-shop" class="app-screen active">
+            <div class="card" style="margin-top: 20px;">
+                <h2 class="ur-bold card-title">دکان کا مکمل حساب</h2>
+                
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="ur">دکان منتخب کریں</label>
+                        <select id="s_name" class="ur" onchange="loadShopData()">
+                            <option value="الشریف گیس شاپ">الشریف گیس شاپ</option>
+                            <option value="نظامی روڈ شاپ">نظامی روڈ شاپ</option>
+                            <option value="بادام بیکری">بادام بیکری</option>
+                            <option value="دکان نمبر 4">دکان نمبر 4</option>
+                            <option value="دکان نمبر 5">دکان نمبر 5</option>
+                            <option value="دکان نمبر 6">دکان نمبر 6</option>
+                            <option value="دکان نمبر 7">دکان نمبر 7</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label class="ur">تاریخ</label><input type="date" id="s_date"></div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="ur">وزن (Weight)</label>
+                        <select id="s_weight" oninput="calcLiveShop()">
+                            <option value="45.4">45.4 KG</option>
+                            <option value="45.2">45.2 KG</option>
+                            <option value="45.0">45.0 KG</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label class="ur">ریٹ (Rs/KG)</label><input type="number" id="s_rate" value="390" oninput="calcLiveShop()"></div>
+                </div>
+
+                <div class="section-box">
+                    <span class="ur-bold section-title">اسٹاک اور سیل</span>
+                    <div class="grid-2">
+                        <div class="form-group"><label class="ur">موجود اسٹاک (Auto)</label><input type="number" id="s_stock" value="0" class="auto-loaded" oninput="calcLiveShop()"></div>
+                        <div class="form-group"><label class="ur">نیا لوڈ</label><input type="number" id="s_load" value="0" oninput="calcLiveShop()"></div>
+                        <div class="form-group"><label class="ur">فروخت (سیل)</label><input type="number" id="s_sale" value="0" oninput="calcLiveShop()"></div>
+                        <div class="form-group"><label class="ur">ہوٹل سپلائی</label><input type="number" id="s_h_sup" value="0" oninput="calcLiveShop()"></div>
+                    </div>
+                </div>
+
+                <div class="section-box" style="background:#fef2f2; border-color:#fecaca;">
+                    <span class="ur-bold section-title st-red">اخراجات (4 کالم)</span>
+                    <div class="grid-2">
+                        <div class="form-group"><input type="text" class="ur" id="e1_n" placeholder="خرچہ 1"><input type="number" id="e1_v" value="0" oninput="calcLiveShop()"></div>
+                        <div class="form-group"><input type="text" class="ur" id="e2_n" placeholder="خرچہ 2"><input type="number" id="e2_v" value="0" oninput="calcLiveShop()"></div>
+                        <div class="form-group"><input type="text" class="ur" id="e3_n" placeholder="خرچہ 3"><input type="number" id="e3_v" value="0" oninput="calcLiveShop()"></div>
+                        <div class="form-group"><input type="text" class="ur" id="e4_n" placeholder="خرچہ 4"><input type="number" id="e4_v" value="0" oninput="calcLiveShop()"></div>
+                    </div>
+                    
+                    <div id="committee_div">
+                        <span class="ur-bold section-title st-red" style="margin-top:15px;">کمیٹی (2 کالم)</span>
+                        <div class="grid-2">
+                            <div class="form-group"><input type="text" class="ur" id="c1_n" placeholder="کمیٹی 1"><input type="number" id="c1_v" value="0" oninput="calcLiveShop()"></div>
+                            <div class="form-group"><input type="text" class="ur" id="c2_n" placeholder="کمیٹی 2"><input type="number" id="c2_v" value="0" oninput="calcLiveShop()"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- UDHAR GAS: Changed placeholder to KG -->
+                <div class="section-box" style="background:#fffbeb; border-color:#fde68a;">
+                    <span class="ur-bold section-title st-orange">ادھار گیس (KG لکھیں)</span>
+                    <div class="grid-2">
+                        <div class="form-group"><input type="text" class="ur" id="u1_n" placeholder="نام 1"><input type="number" id="u1_v" value="0" placeholder="KG" oninput="calcLiveShop()"></div>
+                        <div class="form-group"><input type="text" class="ur" id="u2_n" placeholder="نام 2"><input type="number" id="u2_v" value="0" placeholder="KG" oninput="calcLiveShop()"></div>
+                        <div class="form-group"><input type="text" class="ur" id="u3_n" placeholder="نام 3"><input type="number" id="u3_v" value="0" placeholder="KG" oninput="calcLiveShop()"></div>
+                        <div class="form-group"><input type="text" class="ur" id="u4_n" placeholder="نام 4"><input type="number" id="u4_v" value="0" placeholder="KG" oninput="calcLiveShop()"></div>
+                    </div>
+
+                    <span class="ur-bold section-title st-orange" style="margin-top:15px;">کیش اور بقایا</span>
+                    <div class="grid-2">
+                        <div class="form-group"><label class="ur">پچھلا بقایا (Auto)</label><input type="number" id="s_prev" value="0" class="auto-loaded" oninput="calcLiveShop()"></div>
+                        <div class="form-group"><label class="ur">کیش اٹھایا (وصول)</label><input type="number" id="s_cash_rcv" value="0" oninput="calcLiveShop()"></div>
+                        <div class="form-group"><label class="ur">جمع رقم (دی گئی)</label><input type="number" id="s_jama" value="0" oninput="calcLiveShop()"></div>
+                        <div class="form-group"><label class="ur">کس کو دی (تفصیل)</label><input type="text" class="ur" id="s_jama_name" placeholder="نام لکھیں"></div>
+                    </div>
+                </div>
+
+                <!-- LIVE CALCULATION DISPLAY -->
+                <div class="live-summary">
+                    <div class="live-row"><span class="ur">آج کی گیس آمدنی:</span> <span id="live_s_gross" class="ur" style="color:#60a5fa;">0</span></div>
+                    <div class="live-row"><span class="ur">اخراجات و کمیٹی:</span> <span id="live_s_exp" class="ur" style="color:#f87171;">0</span></div>
+                    <div class="live-row total"><span class="ur">آج کا نیا بقایا:</span> <span id="live_s_net" class="ur">0</span></div>
+                </div>
+
+                <!-- DUAL PDF BUTTONS -->
+                <div class="btn-grid">
+                    <button class="btn-pdf btn-urdu ur-bold" onclick="printShopUrdu()">اردو PDF</button>
+                    <button class="btn-pdf btn-eng" onclick="printShopEng()">English PDF</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- 2. HOTEL SCREEN (ہوٹل کا کھاتہ)            -->
+        <!-- ========================================== -->
+        <div id="screen-hotel" class="app-screen">
+            <div class="card" style="margin-top: 20px;">
+                <h2 class="ur-bold card-title" style="background: linear-gradient(90deg, #16a34a, #15803d);">ہوٹل سپلائی کا حساب</h2>
+                
+                <div class="grid-2">
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label class="ur">ہوٹل منتخب کریں (Auto Save)</label>
+                        <select id="h_name" class="ur" onchange="loadHotelData()"></select>
+                    </div>
+                </div>
+
+                <div class="section-box">
+                    <div class="grid-2">
+                        <div class="form-group"><label class="ur">وزن کا آپشن</label>
+                            <select id="h_weight" oninput="calcLiveHotel()">
+                                <option value="45.4">45.4 KG</option>
+                                <option value="45.0">45.0 KG</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label class="ur">ریٹ (Rs/KG)</label><input type="number" id="h_rate" value="300" oninput="calcLiveHotel()"></div>
+                    </div>
+                </div>
+
+                <div class="section-box" style="background:#f0fdf4; border-color:#bbf7d0;">
+                    <span class="ur-bold section-title st-green">سلنڈر اور گیس کی تفصیل</span>
+                    <div class="grid-2">
+                        <div class="form-group"><label class="ur">پہلے سے خالی (Auto)</label><input type="number" id="h_old_empty" value="0" class="auto-loaded" oninput="calcLiveHotel()"></div>
+                        <div class="form-group"><label class="ur">نئے فل سلنڈر دیئے</label><input type="number" id="h_new_full" value="0" oninput="calcLiveHotel()"></div>
+                        <div class="form-group"><label class="ur">واپس آئی گیس (Return KG)</label><input type="number" id="h_ret_gas" value="0" oninput="calcLiveHotel()"></div>
+                        <div class="form-group"><label class="ur">خالی سلنڈر وصول کیے</label><input type="number" id="h_empty_rcv" value="0" oninput="calcLiveHotel()"></div>
+                    </div>
+                </div>
+
+                <div class="section-box" style="background:#fffbeb; border-color:#fde68a;">
+                    <span class="ur-bold section-title st-orange">رقم کا حساب</span>
+                    <div class="grid-2">
+                        <div class="form-group"><label class="ur">پچھلا بقایا (Auto)</label><input type="number" id="h_prev" value="0" class="auto-loaded" oninput="calcLiveHotel()"></div>
+                        <div class="form-group"><label class="ur">جمع رقم (کیش وصول)</label><input type="number" id="h_jama" value="0" oninput="calcLiveHotel()"></div>
+                    </div>
+                </div>
+
+                <!-- LIVE CALCULATION DISPLAY -->
+                <div class="live-summary">
+                    <div class="live-row"><span class="ur">آج کا بل:</span> <span id="live_h_bill" class="ur" style="color:#60a5fa;">0</span></div>
+                    <div class="live-row"><span class="ur">باقی خالی سلنڈر:</span> <span id="live_h_empty" class="ur" style="color:#f87171;">0</span></div>
+                    <div class="live-row total"><span class="ur">ہوٹل کا نیا بقایا:</span> <span id="live_h_net" class="ur">0</span></div>
+                </div>
+
+                <!-- DUAL PDF BUTTONS -->
+                <div class="btn-grid">
+                    <button class="btn-pdf btn-urdu ur-bold" onclick="printHotelUrdu()">اردو PDF</button>
+                    <button class="btn-pdf btn-eng" onclick="printHotelEng()">English PDF</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- 3. PLANT SCREEN (پلانٹ کا کھاتہ)           -->
+        <!-- ========================================== -->
+        <div id="screen-plant" class="app-screen">
+            <div class="card" style="margin-top: 20px;">
+                <h2 class="ur-bold card-title" style="background: linear-gradient(90deg, #7c3aed, #6d28d9);">پلانٹ لیجر (Company)</h2>
+                
+                <div class="grid-2">
+                    <div class="form-group"><label class="ur">تاریخ</label><input type="date" id="p_date"></div>
+                    <div class="form-group"><label class="ur">آنے والا ریٹ</label><input type="number" id="p_rate" value="3200" oninput="calcLivePlant()"></div>
+                </div>
+
+                <div class="section-box" style="background:#f5f3ff; border-color:#ede9fe;">
+                    <span class="ur-bold section-title" style="background:#ede9fe; color:#6d28d9; border-right-color:#6d28d9;">فارمولا: (ریٹ ÷ 11.8) × 45.4 × لوڈ</span>
+                    <div class="grid-2">
+                        <div class="form-group"><label class="ur">لوڈ (سلنڈر تعداد)</label><input type="number" id="p_load" value="0" oninput="calcLivePlant()"></div>
+                        <div class="form-group">
+                            <label class="ur">اضافی رقم (ایکسٹرا)</label>
+                            <select id="p_extra" oninput="calcLivePlant()">
+                                <option value="0">0 Rs</option>
+                                <option value="350">350 Rs</option>
+                                <option value="400">400 Rs</option>
+                                <option value="450">450 Rs</option>
+                                <option value="500">500 Rs</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-box">
+                    <div class="grid-2">
+                        <div class="form-group"><label class="ur">جمع رقم (دی گئی)</label><input type="number" id="p_jama" value="0" oninput="calcLivePlant()"></div>
+                    </div>
+                </div>
+
+                <!-- LIVE CALCULATION DISPLAY -->
+                <div class="live-summary">
+                    <div class="live-row"><span class="ur">کل بل (گراس):</span> <span id="live_p_bill" class="ur" style="color:#60a5fa;">0</span></div>
+                    <div class="live-row total"><span class="ur">بقیہ خالص رقم:</span> <span id="live_p_net" class="ur">0</span></div>
+                </div>
+
+                <!-- DUAL PDF BUTTONS -->
+                <div class="btn-grid">
+                    <button class="btn-pdf btn-urdu ur-bold" onclick="printPlantUrdu()">اردو PDF</button>
+                    <button class="btn-pdf btn-eng" onclick="printPlantEnglish()">English PDF</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- BOTTOM APP NAVIGATION -->
+    <nav class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('shop', this)">
+            <span class="nav-icon">🏪</span><span class="ur">دکان</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('hotel', this)">
+            <span class="nav-icon">🏨</span><span class="ur">ہوٹل</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('plant', this)">
+            <span class="nav-icon">🏭</span><span class="ur">پلانٹ</span>
+        </div>
+    </nav>
+
+    <!-- HIDDEN PRINT AREA -->
+    <div id="print-area"></div>
+
+<script>
+    document.getElementById('s_date').valueAsDate = new Date();
+    document.getElementById('p_date').valueAsDate = new Date();
+
+    // Populate 40 Hotels
+    let hSelect = document.getElementById('h_name');
+    let customHotels = ["بسم اللہ ہوٹل", "مدینہ ہوٹل", "مکہ ہوٹل", "عوامی تکہ شاپ", "نیو کراچی ہوٹل"];
+    for(let i = 0; i < 40; i++) {
+        let opt = document.createElement('option');
+        opt.value = i < customHotels.length ? customHotels[i] : "ہوٹل نمبر " + (i+1);
+        opt.innerText = (i+1) + ". " + opt.value;
+        hSelect.appendChild(opt);
+    }
+
+    // Navigation Switcher
+    function switchTab(screenName, element) {
+        document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById('screen-' + screenName).classList.add('active');
+        element.classList.add('active');
+        
+        if(screenName === 'shop') loadShopData();
+        if(screenName === 'hotel') loadHotelData();
+    }
+    
+    function fmt(num) { return num.toLocaleString('en-US', {minimumFractionDigits: 1, maximumFractionDigits: 2}); }
+
+    // ==========================================
+    // OFFLINE AUTO-SAVE LOGIC
+    // ==========================================
+    function loadShopData() {
+        let shopName = document.getElementById('s_name').value;
+        let savedBal = parseFloat(localStorage.getItem('alsharif_shop_bal_' + shopName)) || 0;
+        let savedStk = parseInt(localStorage.getItem('alsharif_shop_stk_' + shopName)) || 0;
+        
+        document.getElementById('s_prev').value = savedBal;
+        document.getElementById('s_stock').value = savedStk;
+        
+        let cDiv = document.getElementById('committee_div');
+        cDiv.style.display = shopName.includes('الشریف') ? 'block' : 'none';
+        calcLiveShop();
+    }
+
+    function saveShopData(shopName, newBal, newStk) {
+        localStorage.setItem('alsharif_shop_bal_' + shopName, newBal);
+        localStorage.setItem('alsharif_shop_stk_' + shopName, newStk);
+    }
+
+    function loadHotelData() {
+        let hName = document.getElementById('h_name').value;
+        let savedData = JSON.parse(localStorage.getItem('alsharif_hotel_' + hName)) || { prevBal: 0, oldEmpty: 0 };
+        document.getElementById('h_prev').value = savedData.prevBal;
+        document.getElementById('h_old_empty').value = savedData.oldEmpty;
+        calcLiveHotel();
+    }
+
+    function saveHotelData(hName, newBal, newEmpty) {
+        localStorage.setItem('alsharif_hotel_' + hName, JSON.stringify({ prevBal: newBal, oldEmpty: newEmpty }));
+    }
+
+    // ==========================================
+    // LIVE CALCULATION LOGIC
+    // ==========================================
+    function calcLiveShop() {
+        let rate = parseFloat(document.getElementById('s_rate').value) || 0;
+        let weightFactor = parseFloat(document.getElementById('s_weight').value) || 45.4;
+        let sale = parseInt(document.getElementById('s_sale').value) || 0;
+        let grossIncome = (sale * weightFactor) * rate;
+
+        let expTotal = (parseFloat(document.getElementById('e1_v').value)||0) + (parseFloat(document.getElementById('e2_v').value)||0) + 
+                       (parseFloat(document.getElementById('e3_v').value)||0) + (parseFloat(document.getElementById('e4_v').value)||0);
+        if(document.getElementById('s_name').value.includes('الشریف')) {
+            expTotal += (parseFloat(document.getElementById('c1_v').value)||0) + (parseFloat(document.getElementById('c2_v').value)||0);
+        }
+
+        // Udhar Gas is now in KG. Amount = KG * Rate
+        let u1 = parseFloat(document.getElementById('u1_v').value)||0;
+        let u2 = parseFloat(document.getElementById('u2_v').value)||0;
+        let u3 = parseFloat(document.getElementById('u3_v').value)||0;
+        let u4 = parseFloat(document.getElementById('u4_v').value)||0;
+        let udharKgTotal = u1 + u2 + u3 + u4;
+        let udharAmount = udharKgTotal * rate;
+
+        let todayNet = grossIncome - expTotal - udharAmount;
+        let prevBal = parseFloat(document.getElementById('s_prev').value) || 0;
+        let cashRcv = parseFloat(document.getElementById('s_cash_rcv').value) || 0;
+        let jama = parseFloat(document.getElementById('s_jama').value) || 0;
+        
+        let finalBal = (prevBal + todayNet + cashRcv) - jama;
+
+        document.getElementById('live_s_gross').innerText = "Rs. " + fmt(grossIncome);
+        document.getElementById('live_s_exp').innerText = "Rs. " + fmt(expTotal + udharAmount);
+        
+        let netEl = document.getElementById('live_s_net');
+        netEl.innerText = "Rs. " + fmt(finalBal);
+        if(finalBal < 0) { netEl.classList.add('total-red'); } else { netEl.classList.remove('total-red'); }
+    }
+
+    function calcLiveHotel() {
+        let weightOpt = parseFloat(document.getElementById('h_weight').value) || 45.4;
+        let rate = parseFloat(document.getElementById('h_rate').value) || 0;
+        let oldEmpty = parseInt(document.getElementById('h_old_empty').value) || 0;
+        let newFull = parseInt(document.getElementById('h_new_full').value) || 0;
+        let retGas = parseFloat(document.getElementById('h_ret_gas').value) || 0;
+        let emptyRcv = parseInt(document.getElementById('h_empty_rcv').value) || 0;
+        
+        let netWeight = (newFull * weightOpt) - retGas;
+        let billAmount = netWeight * rate;
+        
+        let prevBal = parseFloat(document.getElementById('h_prev').value) || 0;
+        let jama = parseFloat(document.getElementById('h_jama').value) || 0;
+        let newBal = (prevBal + billAmount) - jama;
+        let newEmpty = (oldEmpty + newFull) - emptyRcv;
+
+        document.getElementById('live_h_bill').innerText = "Rs. " + fmt(billAmount);
+        document.getElementById('live_h_empty').innerText = newEmpty;
+        
+        let netEl = document.getElementById('live_h_net');
+        netEl.innerText = "Rs. " + fmt(newBal);
+        if(newBal < 0) { netEl.classList.add('total-red'); } else { netEl.classList.remove('total-red'); }
+    }
+
+    function calcLivePlant() {
+        let rate = parseFloat(document.getElementById('p_rate').value) || 0;
+        let load = parseInt(document.getElementById('p_load').value) || 0;
+        let extra = parseFloat(document.getElementById('p_extra').value) || 0;
+        let jama = parseFloat(document.getElementById('p_jama').value) || 0;
+
+        let totalBill = ((rate / 11.8) * 45.4 * load) + extra;
+        let netBalance = totalBill - jama;
+
+        document.getElementById('live_p_bill').innerText = "Rs. " + fmt(totalBill);
+        
+        let netEl = document.getElementById('live_p_net');
+        netEl.innerText = "Rs. " + fmt(netBalance);
+        if(netBalance < 0) { netEl.classList.add('total-red'); } else { netEl.classList.remove('total-red'); }
+    }
+
+    // ==========================================
+    // 🖨️ PDF 1: SHOP URDU
+    // ==========================================
+    function printShopUrdu() {
+        let shopVal = document.getElementById('s_name').value;
+        let dateVal = new Date(document.getElementById('s_date').value).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+        
+        let rate = parseFloat(document.getElementById('s_rate').value) || 0;
+        let weightFactor = parseFloat(document.getElementById('s_weight').value) || 45.4;
+        let openStock = parseInt(document.getElementById('s_stock').value) || 0;
+        let load = parseInt(document.getElementById('s_load').value) || 0;
+        let sale = parseInt(document.getElementById('s_sale').value) || 0;
+        let hotelSup = parseInt(document.getElementById('s_h_sup').value) || 0;
+        
+        let closeStock = (openStock + load) - sale - hotelSup;
+        let totalWeight = sale * weightFactor;
+        let grossIncome = totalWeight * rate;
+        
+        let expTotal = (parseFloat(document.getElementById('e1_v').value)||0) + (parseFloat(document.getElementById('e2_v').value)||0) + 
+                       (parseFloat(document.getElementById('e3_v').value)||0) + (parseFloat(document.getElementById('e4_v').value)||0);
+        if(shopVal.includes('الشریف')) {
+            expTotal += (parseFloat(document.getElementById('c1_v').value)||0) + (parseFloat(document.getElementById('c2_v').value)||0);
+        }
+        
+        // Udhar Gas calculated from KG to Amount
+        let u1 = parseFloat(document.getElementById('u1_v').value)||0;
+        let u2 = parseFloat(document.getElementById('u2_v').value)||0;
+        let u3 = parseFloat(document.getElementById('u3_v').value)||0;
+        let u4 = parseFloat(document.getElementById('u4_v').value)||0;
+        let udharKgTotal = u1 + u2 + u3 + u4;
+        let udharAmount = udharKgTotal * rate;
+
+        let todayNet = grossIncome - expTotal - udharAmount;
+        let prevBal = parseFloat(document.getElementById('s_prev').value) || 0;
+        let cashRcv = parseFloat(document.getElementById('s_cash_rcv').value) || 0;
+        let jama = parseFloat(document.getElementById('s_jama').value) || 0;
+        let finalBal = (prevBal + todayNet + cashRcv) - jama;
+
+        saveShopData(shopVal, finalBal, closeStock);
+
+        let html = `
+        <div class="urdu-pdf">
+            <div class="u-head">
+                <h1>${shopVal}</h1>
+                <p>روزانہ کا حساب کتاب رپورٹ</p>
+            </div>
+            
+            <div class="u-sec-title">| اسٹاک کی تفصیل</div>
+            <table>
+                <tr><th>پچھلا اسٹاک</th><th>نیا لوڈ</th><th>سیل + ہوٹل</th><th>باقی اسٹاک (نیکسٹ ڈے)</th></tr>
+                <tr><td>${openStock}</td><td>${load}</td><td class="text-red">${sale + hotelSup}</td><td class="text-green" style="font-size:20px;">${closeStock}</td></tr>
+            </table>
+
+            <div class="u-sec-title">| سیل کی آمدنی</div>
+            <table>
+                <tr><th>وزن</th><th>ریٹ</th><th>کل رقم</th></tr>
+                <tr><td>${totalWeight.toFixed(1)} KG</td><td>${rate}</td><td class="text-green">${fmt(grossIncome)}</td></tr>
+            </table>
+
+            <div class="u-sec-title">| کٹوتیاں (خرچے + کمیٹی + ادھار)</div>
+            <table>
+                <tr><th style="text-align:right;">تفصیل</th><th>رقم / KG</th></tr>
+                <tr><td style="text-align:right;">کل خرچے اور کمیٹی</td><td class="text-red">Rs. ${fmt(expTotal)}</td></tr>
+                <tr><td style="text-align:right;">کل ادھار گیس (${udharKgTotal} KG)</td><td class="text-red">Rs. ${fmt(udharAmount)}</td></tr>
+            </table>
+
+            <div class="u-sec-title">| حتمی خلاصہ</div>
+            <div class="summary-box">
+                <div class="sum-row"><span style="text-align:right;">آج کی خالص آمدنی:</span> <span style="text-align:left;">${fmt(todayNet)}</span></div>
+                <div class="sum-row"><span style="text-align:right;">پچھلا بقایا:</span> <span style="text-align:left;">${fmt(prevBal)}</span></div>
+                <div class="sum-row text-green"><span style="text-align:right;">کیش اٹھایا (وصول):</span> <span style="text-align:left;">+ ${fmt(cashRcv)}</span></div>
+                <div class="sum-row text-red"><span style="text-align:right;">جمع رقم (${document.getElementById('s_jama_name').value || 'تفصیل نہیں'}):</span> <span style="text-align:left;">- ${fmt(jama)}</span></div>
+                <div class="sum-row total"><span style="text-align:right;">دکان کا نیا بقایا:</span> <span style="text-align:left;">${fmt(finalBal)}</span></div>
+            </div>
+        </div>`;
+
+        document.getElementById('print-area').innerHTML = html;
+        window.print();
+    }
+
+    // ==========================================
+    // 🖨️ PDF: SHOP ENGLISH
+    // ==========================================
+    function printShopEng() {
+        // Similar variables but English Template
+        let shopVal = document.getElementById('s_name').value;
+        let dateVal = new Date(document.getElementById('s_date').value).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+        
+        let rate = parseFloat(document.getElementById('s_rate').value) || 0;
+        let weightFactor = parseFloat(document.getElementById('s_weight').value) || 45.4;
+        let openStock = parseInt(document.getElementById('s_stock').value) || 0;
+        let load = parseInt(document.getElementById('s_load').value) || 0;
+        let sale = parseInt(document.getElementById('s_sale').value) || 0;
+        let hotelSup = parseInt(document.getElementById('s_h_sup').value) || 0;
+        
+        let closeStock = (openStock + load) - sale - hotelSup;
+        let totalWeight = sale * weightFactor;
+        let grossIncome = totalWeight * rate;
+        
+        let expTotal = (parseFloat(document.getElementById('e1_v').value)||0) + (parseFloat(document.getElementById('e2_v').value)||0) + 
+                       (parseFloat(document.getElementById('e3_v').value)||0) + (parseFloat(document.getElementById('e4_v').value)||0);
+        if(shopVal.includes('الشریف')) { expTotal += (parseFloat(document.getElementById('c1_v').value)||0) + (parseFloat(document.getElementById('c2_v').value)||0); }
+        
+        let udharKgTotal = (parseFloat(document.getElementById('u1_v').value)||0) + (parseFloat(document.getElementById('u2_v').value)||0) + 
+                         (parseFloat(document.getElementById('u3_v').value)||0) + (parseFloat(document.getElementById('u4_v').value)||0);
+        let udharAmount = udharKgTotal * rate;
+
+        let todayNet = grossIncome - expTotal - udharAmount;
+        let prevBal = parseFloat(document.getElementById('s_prev').value) || 0;
+        let cashRcv = parseFloat(document.getElementById('s_cash_rcv').value) || 0;
+        let jama = parseFloat(document.getElementById('s_jama').value) || 0;
+        let finalBal = (prevBal + todayNet + cashRcv) - jama;
+
+        saveShopData(shopVal, finalBal, closeStock);
+
+        let html = `
+        <div class="eng-pdf">
+            <div class="e-head">
+                <div><h1>AL SHARIF GAS SHOP</h1><p>Daily Shop Ledger - ${shopVal}</p></div>
+                <h3 style="color:white;">${dateVal}</h3>
+            </div>
+            
+            <div class="e-sec-title">| STOCK INVENTORY</div>
+            <table>
+                <tr><th>Opening Stock</th><th>New Load</th><th>Sold & Hotel</th><th>Closing Stock</th></tr>
+                <tr><td>${openStock}</td><td>${load}</td><td class="text-red">${sale + hotelSup}</td><td class="text-green" style="font-size:18px;">${closeStock} Cylinders</td></tr>
+            </table>
+
+            <div class="e-sec-title">| SALES & DEDUCTIONS</div>
+            <table>
+                <tr><th>Description</th><th>Weight / Qty</th><th>Amount</th></tr>
+                <tr><td>Gross Sales Revenue</td><td>${totalWeight.toFixed(1)} KG</td><td class="text-green">Rs. ${fmt(grossIncome)}</td></tr>
+                <tr><td>Total Expenses & Committee</td><td>-</td><td class="text-red">Rs. ${fmt(expTotal)}</td></tr>
+                <tr><td>Credit Gas (Udhar)</td><td>${udharKgTotal} KG</td><td class="text-red">Rs. ${fmt(udharAmount)}</td></tr>
+            </table>
+
+            <div class="e-sec-title">| FINAL RECONCILIATION</div>
+            <div style="display:flex; justify-content:flex-end;">
+                <div class="recon-box">
+                    <div class="recon-row"><span>Today's Net Income:</span> <span>Rs. ${fmt(todayNet)}</span></div>
+                    <div class="recon-row"><span>Previous Balance:</span> <span>Rs. ${fmt(prevBal)}</span></div>
+                    <div class="recon-row"><span>Cash Received (+):</span> <span class="text-green">Rs. ${fmt(cashRcv)}</span></div>
+                    <div class="recon-row"><span>Amount Deposited (-):</span> <span class="text-red">Rs. ${fmt(jama)}</span></div>
+                    <div class="recon-row total" style="background:#1e3a8a; color:white;"><span>FINAL BALANCE:</span> <span>Rs. ${fmt(finalBal)}</span></div>
+                </div>
+            </div>
+        </div>`;
+
+        document.getElementById('print-area').innerHTML = html;
+        window.print();
+    }
+
+    // ==========================================
+    // 🖨️ PDF: HOTEL URDU
+    // ==========================================
+    function printHotelUrdu() {
+        let hName = document.getElementById('h_name').value;
+        let dateVal = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+        let weightOpt = parseFloat(document.getElementById('h_weight').value) || 45.4;
+        let rate = parseFloat(document.getElementById('h_rate').value) || 0;
+        let oldEmpty = parseInt(document.getElementById('h_old_empty').value) || 0;
+        let newFull = parseInt(document.getElementById('h_new_full').value) || 0;
+        let retGas = parseFloat(document.getElementById('h_ret_gas').value) || 0;
+        let emptyRcv = parseInt(document.getElementById('h_empty_rcv').value) || 0;
+        
+        let prevBal = parseFloat(document.getElementById('h_prev').value) || 0;
+        let jama = parseFloat(document.getElementById('h_jama').value) || 0;
+        
+        let netWeight = (newFull * weightOpt) - retGas;
+        let billAmount = netWeight * rate;
+        let newBal = (prevBal + billAmount) - jama;
+        let newEmpty = (oldEmpty + newFull) - emptyRcv;
+
+        saveHotelData(hName, newBal, newEmpty);
+
+        let html = `
+        <div class="urdu-pdf">
+            <div class="u-head green">
+                <h1>${hName}</h1>
+                <p>ہوٹل سپلائی اور گیس کا حساب - تاریخ: ${dateVal}</p>
+            </div>
+            
+            <div class="u-sec-title green">| گیس سپلائی کی تفصیل</div>
+            <table>
+                <tr><th>نئے سلنڈر</th><th>واپس گیس</th><th>خالص وزن</th><th>ریٹ</th><th>آج کا بل</th></tr>
+                <tr><td>${newFull}</td><td>${retGas} KG</td><td>${netWeight.toFixed(1)} KG</td><td>${rate}</td><td class="text-green">${fmt(billAmount)}</td></tr>
+            </table>
+
+            <div class="u-sec-title green">| سلنڈروں کا حساب</div>
+            <table>
+                <tr><th>پہلے سے خالی</th><th>نئے دیئے</th><th>خالی وصول کیے</th><th>باقی خالی موجود</th></tr>
+                <tr><td>${oldEmpty}</td><td>${newFull}</td><td class="text-green">${emptyRcv}</td><td class="text-red" style="font-size:20px;">${newEmpty}</td></tr>
+            </table>
+
+            <div class="u-sec-title green">| حتمی خلاصہ رقم</div>
+            <div class="summary-box" style="border-color:#16a34a;">
+                <div class="sum-row"><span style="text-align:right;">آج کا بل:</span> <span style="text-align:left;">${fmt(billAmount)}</span></div>
+                <div class="sum-row"><span style="text-align:right;">پچھلا بقایا:</span> <span style="text-align:left;">${fmt(prevBal)}</span></div>
+                <div class="sum-row text-green"><span style="text-align:right;">جمع رقم (کیش وصول):</span> <span style="text-align:left;">- ${fmt(jama)}</span></div>
+                <div class="sum-row total green"><span style="text-align:right;">ہوٹل کا نیا بقایا:</span> <span style="text-align:left;">${fmt(newBal)}</span></div>
+            </div>
+        </div>`;
+
+        document.getElementById('print-area').innerHTML = html;
+        window.print();
+    }
+
+    // ==========================================
+    // 🖨️ PDF: HOTEL ENGLISH
+    // ==========================================
+    function printHotelEng() {
+        let hName = document.getElementById('h_name').value;
+        let dateVal = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+        let weightOpt = parseFloat(document.getElementById('h_weight').value) || 45.4;
+        let rate = parseFloat(document.getElementById('h_rate').value) || 0;
+        let oldEmpty = parseInt(document.getElementById('h_old_empty').value) || 0;
+        let newFull = parseInt(document.getElementById('h_new_full').value) || 0;
+        let retGas = parseFloat(document.getElementById('h_ret_gas').value) || 0;
+        let emptyRcv = parseInt(document.getElementById('h_empty_rcv').value) || 0;
+        
+        let prevBal = parseFloat(document.getElementById('h_prev').value) || 0;
+        let jama = parseFloat(document.getElementById('h_jama').value) || 0;
+        
+        let netWeight = (newFull * weightOpt) - retGas;
+        let billAmount = netWeight * rate;
+        let newBal = (prevBal + billAmount) - jama;
+        let newEmpty = (oldEmpty + newFull) - emptyRcv;
+
+        saveHotelData(hName, newBal, newEmpty);
+
+        let html = `
+        <div class="eng-pdf">
+            <div class="e-head green">
+                <div><h1>AL SHARIF GAS SHOP</h1><p>Hotel Supply Ledger - ${hName}</p></div>
+                <h3 style="color:white;">${dateVal}</h3>
+            </div>
+            
+            <div class="e-sec-title green">| GAS SUPPLY DETAILS</div>
+            <table>
+                <tr><th class="green">New Cylinders</th><th class="green">Return Gas</th><th class="green">Net Weight</th><th class="green">Rate</th><th class="green">Today's Bill</th></tr>
+                <tr><td>${newFull}</td><td>${retGas} KG</td><td>${netWeight.toFixed(1)} KG</td><td>${rate}</td><td class="text-green">Rs. ${fmt(billAmount)}</td></tr>
+            </table>
+
+            <div class="e-sec-title green">| CYLINDER TRACKING</div>
+            <table>
+                <tr><th class="green">Previous Empty</th><th class="green">New Delivered</th><th class="green">Empty Received</th><th class="green">Balance Empty</th></tr>
+                <tr><td>${oldEmpty}</td><td>${newFull}</td><td class="text-green">${emptyRcv}</td><td class="text-red" style="font-size:18px;">${newEmpty} Cylinders</td></tr>
+            </table>
+
+            <div class="e-sec-title green">| FINAL RECONCILIATION</div>
+            <div style="display:flex; justify-content:flex-end;">
+                <div class="recon-box">
+                    <div class="recon-row"><span>Today's Bill:</span> <span>Rs. ${fmt(billAmount)}</span></div>
+                    <div class="recon-row"><span>Previous Balance:</span> <span>Rs. ${fmt(prevBal)}</span></div>
+                    <div class="recon-row"><span>Cash Received (-):</span> <span class="text-green">Rs. ${fmt(jama)}</span></div>
+                    <div class="recon-row total" style="background:#16a34a; color:white;"><span>NET BALANCE:</span> <span>Rs. ${fmt(newBal)}</span></div>
+                </div>
+            </div>
+        </div>`;
+
+        document.getElementById('print-area').innerHTML = html;
+        window.print();
+    }
+
+    // ==========================================
+    // 🖨️ PDF: PLANT ENGLISH
+    // ==========================================
+    function printPlantEnglish() {
+        let dateVal = new Date(document.getElementById('p_date').value).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+        let rate = parseFloat(document.getElementById('p_rate').value) || 0;
+        let load = parseInt(document.getElementById('p_load').value) || 0;
+        let extra = parseFloat(document.getElementById('p_extra').value) || 0;
+        let jama = parseFloat(document.getElementById('p_jama').value) || 0;
+
+        let step1 = rate / 11.8;
+        let step2 = step1 * 45.4;
+        let step3 = step2 * load;
+        let totalBill = step3 + extra;
+        let netBalance = totalBill - jama;
+
+        let html = `
+        <div class="eng-pdf">
+            <div class="e-head" style="border-bottom-color:#7c3aed;">
+                <div><h1>AL SHARIF GAS SHOP</h1><p>Company Plant Ledger</p></div>
+                <h3 style="color:white;">${dateVal}</h3>
+            </div>
+
+            <div class="e-sec-title" style="border-left-color:#7c3aed;">| CALCULATION FORMULA DETAILS</div>
+            <table>
+                <tr><th style="background:#7c3aed;">STEP</th><th style="background:#7c3aed;">FORMULA / CALCULATION</th><th style="text-align:right; background:#7c3aed;">RESULT</th></tr>
+                <tr><td>1. Divide by 11.8</td><td>${rate} ÷ 11.8</td><td style="text-align:right;">${step1.toFixed(2)}</td></tr>
+                <tr><td>2. Multiply by 45.4 KG</td><td>${step1.toFixed(2)} × 45.4</td><td style="text-align:right;">${step2.toFixed(2)}</td></tr>
+                <tr><td>3. Multiply by Load</td><td>${step2.toFixed(2)} × ${load} Cylinders</td><td style="text-align:right;">Rs. ${fmt(step3)}</td></tr>
+                <tr style="background:#f8fafc;"><td colspan="2" style="font-weight:bold;">4. Add Extra Amount (Izafi Raqam)</td><td class="text-blue" style="text-align:right;">+ Rs. ${extra}</td></tr>
+            </table>
+
+            <div class="e-sec-title" style="border-left-color:#7c3aed;">| FINAL RECONCILIATION</div>
+            <div style="display:flex; justify-content:flex-end;">
+                <div class="recon-box">
+                    <div class="recon-row"><span>TOTAL BILL:</span> <span class="text-red">Rs. ${fmt(totalBill)}</span></div>
+                    <div class="recon-row"><span>MINUS (-) JAMA RAQAM:</span> <span class="text-green">- Rs. ${fmt(jama)}</span></div>
+                    <div class="recon-row total" style="background:#7c3aed; color:white;"><span>NET BALANCE:</span> <span>Rs. ${fmt(netBalance)}</span></div>
+                </div>
+            </div>
+        </div>`;
+
+        document.getElementById('print-area').innerHTML = html;
+        window.print();
+    }
+
+    // ==========================================
+    // 🖨️ PDF: PLANT URDU
+    // ==========================================
+    function printPlantUrdu() {
+        let dateVal = new Date(document.getElementById('p_date').value).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+        let rate = parseFloat(document.getElementById('p_rate').value) || 0;
+        let load = parseInt(document.getElementById('p_load').value) || 0;
+        let extra = parseFloat(document.getElementById('p_extra').value) || 0;
+        let jama = parseFloat(document.getElementById('p_jama').value) || 0;
+
+        let step1 = rate / 11.8;
+        let step2 = step1 * 45.4;
+        let step3 = step2 * load;
+        let totalBill = step3 + extra;
+        let netBalance = totalBill - jama;
+
+        let html = `
+        <div class="urdu-pdf">
+            <div class="u-head purple">
+                <h1>الشریف ایل پی جی کمپنی</h1>
+                <p>پلانٹ لیجر رپورٹ - تاریخ: ${dateVal}</p>
+            </div>
+            
+            <div class="u-sec-title purple">| فارمولا اور حساب کی تفصیل</div>
+            <table>
+                <tr><th style="border-color:#7c3aed;">تفصیل / فارمولا</th><th style="border-color:#7c3aed;">نتیجہ</th></tr>
+                <tr><td style="text-align:right;">پلانٹ ریٹ تقسیم 11.8 (${rate} ÷ 11.8)</td><td>${step1.toFixed(2)}</td></tr>
+                <tr><td style="text-align:right;">ضرب 45.4 کلو (${step1.toFixed(2)} × 45.4)</td><td>${step2.toFixed(2)}</td></tr>
+                <tr><td style="text-align:right;">ضرب لوڈ (${step2.toFixed(2)} × ${load} سلنڈر)</td><td>Rs. ${fmt(step3)}</td></tr>
+                <tr class="bg-light"><td style="text-align:right; font-weight:bold;">جمع (+) اضافی رقم</td><td class="text-blue">+ Rs. ${extra}</td></tr>
+            </table>
+
+            <div class="u-sec-title purple">| حتمی خلاصہ رقم</div>
+            <div class="summary-box" style="border-color:#7c3aed;">
+                <div class="sum-row"><span style="text-align:right;">کمپنی کا کل بل:</span> <span style="text-align:left;">${fmt(totalBill)}</span></div>
+                <div class="sum-row text-green"><span style="text-align:right;">جمع کرائی گئی رقم (-):</span> <span style="text-align:left;">- ${fmt(jama)}</span></div>
+                <div class="sum-row total purple"><span style="text-align:right;">بقیہ خالص رقم:</span> <span style="text-align:left;">${fmt(netBalance)}</span></div>
+            </div>
+        </div>`;
+
+        document.getElementById('print-area').innerHTML = html;
+        window.print();
+    }
+    
+    // Initialize App
+    window.onload = function() {
+        loadShopData();
+        loadHotelData();
+        calcLivePlant();
+    };
+</script>
+
+</body>
+</html>
