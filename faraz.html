@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Al Sharif LPG - Master ERP</title>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Jameel+Noori+Nastaleeq&family=Inter:wght@400;600;700;800&display=swap');
+
+        * { box-sizing: border-box; font-family: 'Inter', Tahoma, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        .ur { font-family: 'Jameel Noori Nastaleeq', 'Nafees Web Naskh', Tahoma; font-size: 22px; line-height: 1.6; }
+        .ur-bold { font-family: 'Jameel Noori Nastaleeq', 'Nafees Web Naskh', Tahoma; font-size: 26px; font-weight: bold; line-height: 1.6; }
+        
+        body { margin: 0; padding: 0; background-color: #f8fafc; color: #0f172a; padding-bottom: 90px; }
+
+        .app-header { position: sticky; top: 0; left: 0; right: 0; background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); color: white; padding: 18px; text-align: center; box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3); z-index: 100; }
+        .app-header h1 { margin: 0; font-size: 30px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); letter-spacing: 1px; }
+        
+        #sync-status { font-size: 13px; font-family: 'Inter'; background: rgba(0,0,0,0.2); padding: 4px 10px; border-radius: 10px; display: inline-block; margin-top: 5px; }
+
+        .main-content { padding: 15px; }
+        .app-screen { display: none; animation: fadeIn 0.3s ease; }
+        .app-screen.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card { background: #ffffff; border-radius: 16px; padding: 20px; margin-top: 40px; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; position: relative; }
+        
+        .card-title { background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white; padding: 16px; border-radius: 12px; text-align: center; position: absolute; top: -30px; left: 50%; transform: translateX(-50%); width: 85%; box-shadow: 0 12px 20px -5px rgba(37, 99, 235, 0.4); font-size: 26px; border: 2px solid #ffffff; display: flex; justify-content: center; align-items: center; gap: 10px; margin: 0; }
+
+        .section-box { background:#f8fafc; border:1px solid #e2e8f0; padding:18px 15px 15px 15px; border-radius:12px; margin-top:40px; position: relative; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
+        
+        .section-title { background: linear-gradient(90deg, #ffffff, #eff6ff); padding: 8px 16px; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; font-weight: bold; margin-bottom: 15px; margin-top: -38px; box-shadow: 0 4px 10px rgba(0,0,0,0.06); border-left: 4px solid #3b82f6; font-size: 22px; }
+        
+        .st-blue { color: #1e3a8a; border-right: 5px solid #3b82f6; }
+        .st-red { color: #b91c1c; border-right: 5px solid #ef4444; border-left: 4px solid #ef4444; }
+        .st-green { color: #15803d; border-right: 5px solid #22c55e; border-left: 4px solid #22c55e; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-size: 14px; font-weight: bold; color: #475569; margin-bottom: 5px; }
+        .form-group input, .form-group select { padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 16px; font-weight: bold; background: #ffffff; outline: none; transition: 0.3s; width: 100%; }
+        .form-group input:focus, .form-group select:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+        .auto-loaded { background: #eff6ff !important; border-color: #bfdbfe !important; color: #1e3a8a !important; }
+
+        .live-summary { background: linear-gradient(135deg, #0f172a, #1e293b); color: white; border-radius: 12px; padding: 18px; margin-top: 20px; box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+        .live-row { display: flex; justify-content: space-between; font-size: 17px; padding: 6px 0; border-bottom: 1px dashed #475569; }
+        .live-row.total { font-size: 22px; font-weight: bold; color: #60a5fa; border: none; padding-top: 12px; margin-top: 8px; }
+
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .btn-pdf { padding: 14px; border: none; border-radius: 8px; color: white; font-weight: bold; font-size: 18px; cursor: pointer; text-align: center; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+        .btn-pdf:active { transform: scale(0.96); }
+        .btn-blue { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+
+        .bottom-nav { background: #ffffff; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; padding: 8px 5px; position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; box-shadow: 0 -4px 10px rgba(0,0,0,0.05); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #64748b; font-size: 13px; font-weight: bold; cursor: pointer; padding: 6px; border-radius: 10px; transition: 0.3s; flex: 1; text-align: center; }
+        .nav-item.active { color: #2563eb; background: #eff6ff; transform: translateY(-2px); }
+        .nav-icon { font-size: 22px; margin-bottom: 3px; }
+        
+        #print-area { display: none; }
+        @media print {
+            body > *:not(#print-area) { display: none !important; }
+            body { background: white; margin: 0; padding: 0; height: auto; overflow: visible; display: block; }
+            #print-area { display: block !important; position: absolute; top: 0; left: 0; width: 100%; }
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+            .p-ur, .p-en { padding: 18px; margin: 0; border: 2px solid #94a3b8 !important; border-radius: 8px; background: white; }
+            .p-ur { direction: rtl; font-family: 'Jameel Noori Nastaleeq', Tahoma, sans-serif; color: #0f172a; line-height: 1.8; }
+            
+            .print-header { background-color: #1e3a8a; color: white; text-align: center; padding: 18px; border-radius: 6px; margin-bottom: 20px; }
+            .print-header h1 { margin: 0; font-size: 46px; font-weight: bold; line-height: 1.2; text-shadow: 1px 1px 0px rgba(0,0,0,0.2); }
+            .print-header p { margin: 5px 0 0 0; font-size: 24px; opacity: 0.9; }
+
+            .print-meta { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px 20px; border-radius: 6px; margin-bottom: 25px; font-size: 22px; font-weight: bold; box-shadow: inset 0 1px 3px rgba(0,0,0,0.02); }
+            .badge-yellow { background: #fef08a !important; color: #854d0e !important; padding: 4px 12px; border-radius: 4px; border: 1px solid #fde047 !important; display: inline-block; font-family: 'Inter', sans-serif !important; line-height: 1.2; margin-right: 8px; position: relative; top: -2px; }
+
+            .print-sec-title { font-size: 28px; font-weight: bold; color: #1e3a8a; margin: 30px 0 12px 0; border-bottom: 2px solid #1e3a8a; padding-bottom: 5px; display: inline-block; }
+
+            .print-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 22px; }
+            .print-table th { background-color: #1e3a8a !important; color: white !important; font-weight: bold; padding: 12px 15px; text-align: right; border: 1px solid #1e3a8a; }
+            .print-table td { padding: 12px 15px; border-bottom: 1px solid #cbd5e1; border-left: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; text-align: right; }
+            .print-table tr:nth-child(even) { background-color: #f8fafc !important; } 
+            .print-table tr:last-child td { border-bottom: 2px solid #1e3a8a; }
+
+            .tbl-2col th:first-child, .tbl-2col td:first-child { width: 68%; text-align: right; }
+            .tbl-2col th:last-child, .tbl-2col td:last-child { width: 32%; text-align: left; }
+
+            .text-red { color: #dc2626 !important; font-weight: bold; }
+            .text-green { color: #16a34a !important; font-weight: bold; }
+            .text-blue { color: #1e3a8a !important; font-weight: bold; }
+
+            .print-summary { margin-top: 25px; border: 2px solid #1e3a8a; border-radius: 8px; padding: 18px; background: #f0fdfa; page-break-inside: avoid; }
+            .print-summary-row { display: flex; justify-content: space-between; padding: 10px 0; font-size: 24px; border-bottom: 1px dashed #94a3b8; align-items: center; }
+            .print-summary-row:last-child { border-bottom: none; }
+            .print-summary-row div:first-child { width: 65%; text-align: right; }
+            .print-summary-row div:last-child { width: 35%; text-align: left; font-weight: bold; }
+            
+            .print-summary-total { background: #1e3a8a !important; color: white !important; padding: 15px 18px; font-size: 28px; font-weight: bold; border-radius: 6px; margin-top: 12px; display: flex; justify-content: space-between; align-items: center; }
+            
+            .p-en { direction: ltr; font-family: 'Inter', Arial, sans-serif; font-size: 14px; }
+            .p-en .print-header { padding: 22px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; text-align: left; }
+            .p-en .print-header h1 { font-size: 28px; text-transform: uppercase; }
+            .p-en .print-header p { font-size: 16px; margin-top: 5px; }
+            .p-en .p-en-htitle { color: #bfdbfe; font-size: 18px; font-weight: bold; letter-spacing: 1px; text-align: right; }
+            .p-en .print-meta { font-size: 16px; margin-bottom: 30px; }
+            .p-en .badge-yellow { margin-right: 0; margin-left: 8px; top: 0; }
+            .p-en .print-sec-title { font-size: 18px; margin: 30px 0 12px 0; text-transform: uppercase; }
+            .p-en .print-table { font-size: 15px; margin-bottom: 25px; }
+            .p-en .print-table th { font-size: 14px; text-transform: uppercase; text-align: left; padding: 14px; }
+            .p-en .print-table td { text-align: left; padding: 14px; }
+            .p-en .tbl-2col th:first-child, .p-en .tbl-2col td:first-child { text-align: left; width: 68%; }
+            .p-en .tbl-2col th:last-child, .p-en .tbl-2col td:last-child { text-align: right; width: 32%; }
+            .p-en .print-summary { display: flex; flex-direction: column; gap: 10px; }
+            .p-en .print-summary-row { font-size: 16px; padding: 12px 0; }
+            .p-en .print-summary-row div:first-child { text-align: left; }
+            .p-en .print-summary-row div:last-child { text-align: right; }
+            .p-en .print-summary-total { font-size: 20px; padding: 18px; margin-top: 5px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="app-header">
+        <h1 class="ur-bold">الشریف ایل پی جی سسٹم</h1>
+        <div id="sync-status">🟢 Offline Ready</div>
+    </header>
+
+    <main class="main-content">
+        
+        <!-- SHOP SCREEN -->
+        <div id="screen-shop" class="app-screen active">
+            <div class="card" style="margin-top: 40px;">
+                <h2 class="ur-bold card-title">🏪 دکان کا حساب کتاب</h2>
+                
+                <div class="grid-2" style="margin-top: 25px;">
+                    <div class="form-group">
+                        <label class="ur">دکان کا نام</label>
+                        <select id="s_name" class="ur" onchange="loadShopData();">
+                            <option value="مین شاپ">مین شاپ</option>
+                            <option value="ٹھٹھہ شاپ نمبر 2">ٹھٹھہ شاپ نمبر 2</option>
+                            <option value="فرید چوک شاپ">فرید چوک شاپ</option>
+                            <option value="بکاکے شاپ">بکاکے شاپ</option>
+                            <option value="الشریف گیس شاپ">الشریف گیس شاپ</option>
+                            <option value="نظامی روڈ شاپ">نظامی روڈ شاپ</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label class="ur">تاریخ</label><input type="date" id="s_date"></div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group"><label class="ur">وزن (Weight)</label>
+                        <select id="s_weight" class="ur" onchange="calcLiveShop()">
+                            <option value="45.4">45.4 KG</option>
+                            <option value="45.2">45.2 KG</option>
+                            <option value="45.0">45.0 KG</option>
+                            <option value="1">ڈائریکٹ (بغیر وزن)</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label class="ur">ریٹ (Rs)</label><input type="number" id="s_rate" value="380" oninput="calcLiveShop()"></div>
+                </div>
+
+                <div class="section-box">
+                    <span class="ur-bold section-title st-blue">📦 اسٹاک (گیس والے سلنڈر)</span>
+                    <div class="grid-2">
+                        <div class="form-group"><label class="ur">پہلے سے موجود اسٹاک</label><input type="number" id="s_stock" value="0" class="auto-loaded" oninput="calcLiveShop()"></div>
+                        <div class="form-group"><label class="ur">نیا لوڈ (سلنڈر آئے)</label><input type="number" id="s_load" value="0" oninput="calcLiveShop()"></div>
+                        <div class="form-group"><label class="ur">دکان کی سیل (سلنڈر)</label><input type="number" id="s_sale" value="0" oninput="calcLiveShop()"></div>
+                        <div class="form-group"><label class="ur">ہوٹل / دیگر سپلائی</label><input type="number" id="s_h_sup" value="0" oninput="calcLiveShop()"></div>
+                    </div>
+                </div>
+
+                <div class="section-box">
+                    <span class="ur-bold section-title st-blue">🔄 خالی سلنڈر کا حساب</span>
+                    <div class="grid-2">
+                        <div class="form-group" style="grid-column: span 2;"><label class="ur">پہلے سے موجود خالی (خود لکھیں یا آٹو)</label><input type="number" id="s_old_empty" value="0" class="auto-loaded" oninput="calcLiveShop()"></div>
+                        <div class="form-group"><label class="ur">آج کے خالی وصول کیے</label><input type="number" id="s_empty_rcv" value="0" oninput="calcLiveShop()"></div>
+                        <div class="form-group"><label class="ur">کس سے وصول کیے؟ (نام)</label><input type="text" id="s_empty_rcv_name" class="ur" placeholder="نام لکھیں"></div>
+                        <div class="form-group" style="grid-column: span 2;"><label class="ur">پلانٹ کو خالی بھیجے (-)</label><input type="number" id="s_empty_sent" value="0" oninput="calcLiveShop()"></div>
+                    </div>
+                </div>
+
+                <div class="section-box">
+                    <span class="ur-bold section-title st-blue">💰 وصولی / جمع</span>
+                    <div class="grid-2">
+                        <div class="form-group" style="grid-column: span 2;"><label class="ur">پچھلا بقایا (خود لکھیں یا آٹو)</label><input type="number" id="s_prev" value="0" class="auto-loaded" oninput="calcLiveShop()"></div>
+                        
+                        <div class="form-group"><label class="ur">رقم وصول کی / نکالی گئی (-)</label><input type="number" id="s_cash_rcv" value="0" oninput="calcLiveShop()"></div>
+                        <div class="form-group"><label class="ur">کس نے وصول کی؟</label><input type="text" class="ur" id="s_cash_name" placeholder="نام لکھیں"></div>
+                        
+                        <div class="form-group"><label class="ur">رقم جمع کروائی (-)</label><input type="number" id="s_jama" value="0" oninput="calcLiveShop()"></div>
+                        <div class="form-group"><label class="ur">کس کو جمع کروائی؟</label><input type="text" class="ur" id="s_jama_name" placeholder="نام لکھیں"></div>
+                    </div>
+                </div>
+
+                <div class="section-box">
+                    <span class="ur-bold section-title st-red">📉 اخراجات (نقد)</span>
+                    <div class="grid-2">
+                        <div class="form-group"><input type="text" class="ur" id="e1_n" placeholder="خرچہ 1"><input type="number" id="e1_v" value="0" oninput="calcLiveShop()"></div>
+                        <div class="form-group"><input type="text" class="ur" id="e2_n" placeholder="خرچہ 2"><input type="number" id="e2_v" value="0" oninput="calcLiveShop()"></div>
+                        <div class="form-group"><input type="text" class="ur" id="c1_n" placeholder="کمیٹی 1"><input type="number" id="c1_v" value="0" oninput="calcLiveShop()"></div>
+                        <div class="form-group"><input type="text" class="ur" id="c2_n" placeholder="کمیٹی 2"><input type="number" id="c2_v" value="0" oninput="calcLiveShop()"></div>
+                    </div>
+                    
+                    <span class="ur-bold section-title st-red" style="margin-top:20px;">📝 ادھار گیس (KG لکھیں)</span>
+                    <div class="grid-2">
+                        <div class="form-group"><input type="text" class="ur" id="u1_n" placeholder="نام 1"><input type="number" id="u1_v" value="0" placeholder="وزن (KG)" oninput="calcLiveShop()"></div>
+                        <div class="form-group"><input type="text" class="ur" id="u2_n" placeholder="نام 2"><input type="number" id="u2_v" value="0" placeholder="وزن (KG)" oninput="calcLiveShop()"></div>
+                        <div class="form-group"><input type="text" class="ur" id="u3_n" placeholder="نام 3"><input type="number" id="u3_v" value="0" placeholder="وزن (KG)" oninput="calcLiveShop()"></div>
+                        <div class="form-group"><input type="text" class="ur" id="u4_n" placeholder="نام 4"><input type="number" id="u4_v" value="0" placeholder="وزن (KG)" oninput="calcLiveShop()"></div>
+                    </div>
+                </div>
+
+                <div class="live-summary">
+                    <div class="live-row"><span class="ur">کل گراس سیل (<span id="live_s_cyl_count">0</span> سلنڈر):</span> <span id="live_s_gross" class="ur" style="color:#93c5fd;">0</span></div>
+                    <div class="live-row total"><span class="ur">آج کا نیا بقایا:</span> <span id="live_s_net" class="ur">0</span></div>
+                </div>
+
+                <div class="btn-grid">
+                    <button class="btn-pdf btn-blue ur-bold" onclick="printShopUrdu()">اردو بل (PDF)</button>
+                    <button class="btn-pdf btn-blue" onclick="printShopEnglish()" style="font-family:'Inter', sans-serif;">English Bill</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- HOTEL SCREEN -->
+        <div id="screen-hotel" class="app-screen">
+            <div class="card" style="margin-top: 40px;">
+                <h2 class="ur-bold card-title">🏨 ہوٹل سپلائی کا حساب</h2>
+                
+                <div class="grid-2" style="margin-top: 25px;">
+                    <div class="form-group">
+                        <label class="ur">ہوٹل کا نام</label>
+                        <input type="text" id="h_name" class="ur" list="hotel_list" placeholder="ہوٹل کا نام..." onchange="loadHotelData();">
+                        <datalist id="hotel_list">
+                            <option value="بسم اللہ ہوٹل"></option>
+                            <option value="مدینہ ہوٹل"></option>
+                        </datalist>
+                    </div>
+                    <div class="form-group"><label class="ur">تاریخ</label><input type="date" id="h_date"></div>
+                </div>
+
+                <div class="section-box">
+                    <span class="ur-bold section-title st-blue">🛒 سپلائی اور ریٹ</span>
+                    <div class="grid-2">
+                        <div class="form-group"><label class="ur">وزن (Weight)</label>
+                            <select id="h_weight" class="ur" onchange="calcLiveHotel()">
+                                <option value="45.4">45.4 KG</option>
+                                <option value="45.0">45.0 KG</option>
+                                <option value="1">ڈائریکٹ (بغیر وزن)</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label class="ur">ریٹ (Rs)</label><input type="number" id="h_rate" value="380" oninput="calcLiveHotel()"></div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group"><label class="ur">سپلائی (نئے سلنڈر)</label><input type="number" id="h_supply" value="0" oninput="calcLiveHotel()"></div>
+                        <div class="form-group"><label class="ur">ادھار گیس (مقدار لکھیں)</label><input type="number" id="h_udhar" value="0" placeholder="Quantity/KG" oninput="calcLiveHotel()"></div>
+                        <div class="form-group"><label class="ur">واپسی گیس (مقدار لکھیں)</label><input type="number" id="h_return" value="0" placeholder="Quantity/KG" oninput="calcLiveHotel()"></div>
+                    </div>
+                </div>
+
+                <div class="section-box">
+                    <span class="ur-bold section-title st-blue">💰 کیش اور بقایا</span>
+                    <div class="grid-2">
+                        <div class="form-group" style="grid-column: span 2;"><label class="ur">پچھلا بقایا (خود لکھیں یا آٹو)</label><input type="number" id="h_old_bal" value="0" class="auto-loaded" oninput="calcLiveHotel()"></div>
+                        <div class="form-group"><label class="ur">رقم وصول کی / جمع کروائی (-)</label><input type="number" id="h_cash" value="0" oninput="calcLiveHotel()"></div>
+                        <div class="form-group"><label class="ur">کیش کس سے وصول کیا؟</label><input type="text" class="ur" id="h_cash_name" placeholder="نام لکھیں"></div>
+                    </div>
+                </div>
+
+                <div class="section-box">
+                    <span class="ur-bold section-title st-blue">🔄 خالی سلنڈر کا حساب</span>
+                    <div class="grid-2">
+                        <div class="form-group" style="grid-column: span 2;"><label class="ur">پہلے سے موجود خالی (خود لکھیں یا آٹو)</label><input type="number" id="h_old_empty" value="0" class="auto-loaded" oninput="calcLiveHotel()"></div>
+                        <div class="form-group"><label class="ur">آج وصول کیے (مائنس)</label><input type="number" id="h_empty_rcv" value="0" oninput="calcLiveHotel()"></div>
+                        <div class="form-group"><label class="ur">کس کے ہاتھ آئے؟ (نام)</label><input type="text" id="h_empty_rcv_name" class="ur" placeholder="نام لکھیں"></div>
+                    </div>
+                </div>
+
+                <div class="live-summary">
+                    <div class="live-row"><span class="ur">آج کا ٹوٹل بل:</span> <span id="live_h_bill" class="ur" style="color:#93c5fd;">0</span></div>
+                    <div class="live-row total"><span class="ur">فائنل بقایا رقم:</span> <span id="live_h_net" class="ur">0</span></div>
+                </div>
+
+                <div class="btn-grid">
+                    <button class="btn-pdf btn-blue ur-bold" onclick="printHotelUrdu()">اردو بل (PDF)</button>
+                    <button class="btn-pdf btn-blue" style="font-family:'Inter', sans-serif;" onclick="printHotelEnglish()">English Bill</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PLANT SCREEN -->
+        <div id="screen-plant" class="app-screen">
+            <div class="card" style="margin-top: 40px;">
+                <h2 class="ur-bold card-title">🏭 کمپنی / مین پلانٹ</h2>
+                
+                <div class="grid-2" style="margin-top: 25px;">
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label class="ur">تاریخ</label>
+                        <input type="date" id="p_date">
+                    </div>
+                </div>
+
+                <div class="section-box" style="margin-top: 10px;">
+                    <span class="ur-bold section-title st-blue">🏢 دکان کی سپلائی</span>
+                    <datalist id="plant_shop_list">
+                        <option value="مین شاپ"></option>
+                        <option value="ٹھٹھہ شاپ نمبر 2"></option>
+                        <option value="فرید چوک شاپ"></option>
+                        <option value="بکاکے شاپ"></option>
+                        <option value="الشریف گیس شاپ"></option>
+                        <option value="نظامی روڈ شاپ"></option>
+                    </datalist>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="ur">دکان کا نام</label>
+                            <input type="text" class="ur" id="ps_n" list="plant_shop_list" placeholder="نام منتخب کریں یا لکھیں">
+                        </div>
+                        <div class="form-group">
+                            <label class="ur">دیے گئے سلنڈر</label>
+                            <input type="number" id="ps_q" placeholder="مقدار" value="0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group"><label class="ur">پلانٹ کا ریٹ (11.8KG)</label><input type="number" id="p_base_rate" value="3200" oninput="calcLivePlant()"></div>
+                    <div class="form-group"><label class="ur">وزن سے ضرب (Weight)</label><input type="number" id="p_weight" value="45.4" oninput="calcLivePlant()"></div>
+                </div>
+
+                <div class="section-box">
+                    <span class="ur-bold section-title st-blue">📊 اضافی چارجز اور ٹوٹل سلنڈر</span>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="ur">اضافی چارجز / کمیشن (+)</label>
+                            <select id="p_comm" class="ur" onchange="calcLivePlant()">
+                                <option value="300">300 روپے</option>
+                                <option value="350" selected>350 روپے</option>
+                                <option value="400">400 روپے</option>
+                                <option value="450">450 روپے</option>
+                                <option value="500">500 روپے</option>
+                                <option value="0">کوئی نہیں (0)</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label class="ur">ٹوٹل سلنڈر آئے (Load)</label><input type="number" id="p_qty" value="5" oninput="calcLivePlant()"></div>
+                    </div>
+                </div>
+                
+                <div class="section-box">
+                    <span class="ur-bold section-title st-blue">🔄 خالی سلنڈر (پلانٹ کا کھاتہ)</span>
+                    <div class="grid-2">
+                        <div class="form-group" style="grid-column: span 2;"><label class="ur">پلانٹ کے پاس خالی (خود لکھیں یا آٹو)</label><input type="number" id="p_old_empty" value="0" class="auto-loaded" oninput="calcLivePlant()"></div>
+                        <div class="form-group" style="grid-column: span 2;"><label class="ur">آج پلانٹ کو بھیجے (+)</label><input type="number" id="p_empty_sent" value="0" oninput="calcLivePlant()"></div>
+                        <div class="form-group"><label class="ur">پلانٹ سے واپس آئے (-)</label><input type="number" id="p_empty_rcv" value="0" oninput="calcLivePlant()"></div>
+                        <div class="form-group"><label class="ur">لانے والے کا نام؟</label><input type="text" id="p_empty_rcv_name" class="ur" placeholder="نام لکھیں"></div>
+                    </div>
+                </div>
+
+                <div class="section-box">
+                    <span class="ur-bold section-title st-red">📉 اخراجات اور ایڈوانس کٹوتی</span>
+                    <div class="grid-2">
+                        <div class="form-group"><label class="ur">متفرق خرچہ (Expense)</label><input type="number" id="p_exp" value="0" oninput="calcLivePlant()"></div>
+                        <div class="form-group"><label class="ur">ایڈوانس لیا گیا (-)</label><input type="number" id="p_adv_taken" value="0" oninput="calcLivePlant()"></div>
+                    </div>
+                </div>
+
+                <div class="section-box">
+                    <span class="ur-bold section-title st-blue">💰 جمع رقم (سب سے آخر میں)</span>
+                    <div class="grid-2">
+                        <div class="form-group" style="grid-column: span 2;"><label class="ur">پچھلا بقایا (خود لکھیں یا آٹو)</label><input type="number" id="p_prev_bal" value="0" class="auto-loaded" oninput="calcLivePlant()"></div>
+                        <div class="form-group"><label class="ur">جمع کروائی گئی رقم (-)</label><input type="number" id="p_jama" value="0" oninput="calcLivePlant()"></div>
+                        <div class="form-group"><label class="ur">کس کے ہاتھ جمع کروائی؟</label><input type="text" id="p_jama_name" placeholder="نام لکھیں" class="ur"></div>
+                    </div>
+                </div>
+
+                <div class="live-summary">
+                    <div class="live-row"><span class="ur">قابلِ ادا بل (خرچے نکال کر):</span> <span id="live_p_payable" style="color:#f87171;">0</span></div>
+                    <div class="live-row total"><span class="ur">فائنل بقایا (جمع نکال کر):</span> <span id="live_p_net">0</span></div>
+                </div>
+
+                <div class="btn-grid">
+                    <button class="btn-pdf btn-blue ur-bold" onclick="printPlantUrdu()">اردو لیجر (PDF)</button>
+                    <button class="btn-pdf btn-blue" style="font-family:'Inter', sans-serif;" onclick="printPlantEnglish()">English Ledger</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- HISTORY SCREEN -->
+        <div id="screen-history" class="app-screen">
+            <div class="card" style="margin-top: 40px;">
+                <h2 class="ur-bold card-title" style="background: linear-gradient(135deg, #0f172a, #334155);">📋 پرانا ریکارڈ (History)</h2>
+                
+                <div class="grid-2" style="margin-top: 25px;">
+                    <div class="form-group">
+                        <label class="ur">قسم (Category)</label>
+                        <select id="hist_type" class="ur" onchange="loadHistoryUI()">
+                            <option value="all">سب (All)</option>
+                            <option value="shop">شاپ (Shop)</option>
+                            <option value="hotel">ہوٹل (Hotel)</option>
+                            <option value="plant">پلانٹ (Plant)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="ur">تلاش کریں (Search)</label>
+                        <input type="text" id="hist_search" class="ur" placeholder="نام لکھیں..." oninput="loadHistoryUI()">
+                    </div>
+                </div>
+                
+                <div id="history_list" style="margin-top: 20px;"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- NAVIGATION -->
+    <nav class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('shop', this)">
+            <div class="nav-icon">🏪</div><span class="ur" style="font-size:16px;">شاپ</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('hotel', this)">
+            <div class="nav-icon">🏨</div><span class="ur" style="font-size:16px;">ہوٹل</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('plant', this)">
+            <div class="nav-icon">🏭</div><span class="ur" style="font-size:16px;">پلانٹ</span>
+        </div>
+        <div class="nav-item" id="nav-history" onclick="checkHistoryLock(this)">
+            <div class="nav-icon">🔒</div><span class="ur" style="font-size:16px;">ریکارڈ</span>
+        </div>
+    </nav>
+
+    <div id="print-area"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <script>
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            console.error("App Error:", msg);
+            return false;
+        };
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDX1vSfcM8CCFuH03HO4WEQld6kz-Ek9sU",
+            authDomain: "sharif-lpg-system.firebaseapp.com",
+            databaseURL: "https://sharif-lpg-system-default-rtdb.firebaseio.com",
+            projectId: "sharif-lpg-system",
+            storageBucket: "sharif-lpg-system.firebasestorage.app",
+            messagingSenderId: "628332689273",
+            appId: "1:628332689273:web:4a66367d2250084ed261a8"
+        };
+
+        let db = null;
+        let isOnline = false;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.database();
+            isOnline = true;
+            document.getElementById('sync-status').innerText = "🟢 Online (Firebase Connected)";
+        } catch(e) {
+            console.error("Firebase Init Error:", e);
+        }
+
+        const StorageHelper = {
+            get: function(key, def) {
+                try { let val = localStorage.getItem(key); return val ? JSON.parse(val) : def; } 
+                catch(e) { return def; }
+            },
+            set: function(key, val) {
+                try { 
+                    localStorage.setItem(key, JSON.stringify(val)); 
+                    if(isOnline && db && key !== 'app_history') {
+                        db.ref('AlSharifData/' + key).set(val);
+                    }
+                } catch(e) {}
+            }
+        };
+
+        function syncFromFirebase() {
+            if(!isOnline || !db) return;
+            document.getElementById('sync-status').innerText = "⏳ Syncing...";
+            db.ref('AlSharifData').once('value').then((snapshot) => {
+                if(snapshot.exists()) {
+                    let data = snapshot.val();
+                    for(let key in data) {
+                        localStorage.setItem(key, JSON.stringify(data[key]));
+                    }
+                    loadShopData(); loadHotelData(); loadPlantData(); loadHistoryUI();
+                    document.getElementById('sync-status').innerText = "🟢 Online & Synced";
+                } else {
+                    document.getElementById('sync-status').innerText = "🟢 Online (New Database)";
+                }
+            }).catch(e => {
+                document.getElementById('sync-status').innerText = "🔴 Sync Error";
+            });
+        }
+
+        document.getElementById('s_date').valueAsDate = new Date();
+        document.getElementById('h_date').valueAsDate = new Date();
+        document.getElementById('p_date').valueAsDate = new Date();
+
+        function switchTab(tab, btnElement) {
+            document.querySelectorAll('.app-screen').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById('screen-' + tab).classList.add('active');
+            if(btnElement) btnElement.classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        function checkHistoryLock(element) {
+            let pass = prompt("براہ کرم پرانا ریکارڈ دیکھنے کے لیے پاسورڈ درج کریں:\n(ڈیفالٹ پاسورڈ: 786)");
+            if(pass === "786") {
+                switchTab('history', element);
+                loadHistoryUI();
+            } else if(pass !== null) {
+                alert("غلط پاسورڈ! آپ ریکارڈ نہیں دیکھ سکتے۔");
+            }
+        }
+
+        function fmt(num) { return Number(num).toLocaleString('en-US', {minimumFractionDigits: 1, maximumFractionDigits: 2}); }
+
+        function clearShopInputs() {
+            let ids = ['s_load','s_sale','s_h_sup','s_empty_rcv','s_empty_rcv_name','s_empty_sent','s_cash_rcv','s_cash_name','s_jama','s_jama_name','e1_n','e1_v','e2_n','e2_v','c1_n','c1_v','c2_n','c2_v','u1_n','u1_v','u2_n','u2_v','u3_n','u3_v','u4_n','u4_v'];
+            ids.forEach(id => { let el = document.getElementById(id); if(el) { if(el.type==='number') el.value='0'; else el.value=''; } });
+            calcLiveShop();
+        }
+
+        function clearHotelInputs() {
+            let ids = ['h_supply','h_udhar','h_return','h_cash','h_cash_name','h_empty_rcv','h_empty_rcv_name'];
+            ids.forEach(id => { let el = document.getElementById(id); if(el) { if(el.type==='number') el.value='0'; else el.value=''; } });
+            calcLiveHotel();
+        }
+
+        function clearPlantInputs() {
+            let ids = ['p_qty','p_empty_sent','p_empty_rcv','p_empty_rcv_name','p_exp','p_adv_taken','p_jama','p_jama_name','ps_n','ps_q'];
+            ids.forEach(id => { let el = document.getElementById(id); if(el) { if(el.type==='number') el.value='0'; else el.value=''; } });
+            calcLivePlant();
+        }
+
+        function saveToHistory(type, name, date, htmlContent, finalBalance) {
+            let hist = StorageHelper.get('app_history', []);
+            hist.unshift({ id: Date.now(), type: type, name: name, date: date, total: finalBalance, html: htmlContent });
+            if(hist.length > 50) hist.pop(); 
+            StorageHelper.set('app_history', hist);
+            
+            if(isOnline && db) {
+                let lightHist = hist.map(h => ({id: h.id, type: h.type, name: h.name, date: h.date, total: h.total}));
+                db.ref('AlSharifData/app_history_light').set(lightHist);
+            }
+        }
+
+        function loadHistoryUI() {
+            let hist = StorageHelper.get('app_history', []);
+            let typeFilter = document.getElementById('hist_type').value;
+            let searchQ = document.getElementById('hist_search').value.trim().toLowerCase();
+            
+            let html = '';
+            hist.forEach(h => {
+                if(typeFilter !== 'all' && h.type !== typeFilter) return;
+                if(searchQ && !h.name.toLowerCase().includes(searchQ)) return;
+                
+                let typeIcon = h.type === 'shop' ? '🏪' : h.type === 'hotel' ? '🏨' : '🏭';
+                html += `
+                <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:10px; padding:15px; margin-bottom:15px; display:flex; justify-content:space-between; align-items:center; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <div style="width: 70%;">
+                        <div style="font-size:22px; font-weight:bold; color:#1e3a8a;" class="ur">${typeIcon} ${h.name}</div>
+                        <div style="font-size:15px; color:#475569; margin-top:5px; font-family:'Inter', sans-serif;">
+                            <b>Date:</b> ${h.date} <br>
+                            <b>Balance:</b> <span style="color:#b91c1c;">Rs. ${fmt(h.total)}</span>
+                        </div>
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:8px;">
+                        <button class="btn-blue ur" style="padding:8px 15px; border:none; border-radius:6px; color:white; font-weight:bold; cursor:pointer;" onclick="viewPastBill(${h.id})">دیکھیں</button>
+                        <button class="ur" style="padding:5px 10px; border:1px solid #ef4444; background:#fef2f2; border-radius:6px; color:#ef4444; font-weight:bold; cursor:pointer; font-size:16px;" onclick="deleteHistoryRecord(${h.id})">Delete</button>
+                    </div>
+                </div>`;
+            });
+            if(html === '') html = '<div class="ur" style="text-align:center; color:#64748b; padding:20px; font-size:22px;">کوئی پرانا ریکارڈ موجود نہیں ہے۔</div>';
+            document.getElementById('history_list').innerHTML = html;
+        }
+
+        function viewPastBill(id) {
+            let hist = StorageHelper.get('app_history', []);
+            let record = hist.find(h => h.id === id);
+            if(record) { executeMobilePrint(record.html); }
+        }
+
+        function deleteHistoryRecord(id) {
+            if(confirm("کیا آپ واقعی یہ ریکارڈ ڈیلیٹ کرنا چاہتے ہیں؟")) {
+                let hist = StorageHelper.get('app_history', []);
+                hist = hist.filter(h => h.id !== id);
+                StorageHelper.set('app_history', hist);
+                loadHistoryUI();
+            }
+        }
+
+        function calcLiveShop() {
+            let sale = parseFloat(document.getElementById('s_sale').value) || 0;
+            let rate = parseFloat(document.getElementById('s_rate').value) || 0;
+            let weight = parseFloat(document.getElementById('s_weight').value) || 1;
+            let grossSale = sale * weight * rate; 
+            if(weight === 1) grossSale = sale * rate; 
+
+            let totalExp = 0;
+            for(let i=1; i<=2; i++) {
+                let eV = document.getElementById('e'+i+'_v');
+                let cV = document.getElementById('c'+i+'_v');
+                if(eV) totalExp += (parseFloat(eV.value) || 0);
+                if(cV) totalExp += (parseFloat(cV.value) || 0);
+            }
+            let udharTotal = 0;
+            for(let i=1; i<=4; i++) {
+                let uV = document.getElementById('u'+i+'_v');
+                if(uV) udharTotal += ((parseFloat(uV.value) || 0) * rate);
+            }
+            let wasoolCash = parseFloat(document.getElementById('s_cash_rcv').value) || 0;
+            totalExp += udharTotal + wasoolCash;
+
+            let prev = parseFloat(document.getElementById('s_prev').value) || 0;
+            let jama = parseFloat(document.getElementById('s_jama').value) || 0;
+            let availableCash = grossSale; 
+            let netRemaining = availableCash - totalExp;
+            let finalBal = prev + netRemaining - jama;
+
+            document.getElementById('live_s_cyl_count').innerText = sale;
+            document.getElementById('live_s_gross').innerText = grossSale.toFixed(1);
+            document.getElementById('live_s_net').innerText = finalBal.toFixed(1);
+        }
+
+        function calcLiveHotel() {
+            let supply = parseFloat(document.getElementById('h_supply').value) || 0;
+            let rate = parseFloat(document.getElementById('h_rate').value) || 0;
+            let weight = parseFloat(document.getElementById('h_weight').value) || 1;
+            let grossBill = supply * weight * rate;
+            if(weight === 1) grossBill = supply * rate; 
+            
+            let udharQty = parseFloat(document.getElementById('h_udhar').value) || 0;
+            let returnQty = parseFloat(document.getElementById('h_return').value) || 0;
+            let udharGasAmt = udharQty * rate;
+            let returnGasAmt = returnQty * rate;
+            let totalBill = grossBill + udharGasAmt - returnGasAmt;
+            
+            let prevBal = parseFloat(document.getElementById('h_old_bal').value) || 0;
+            let cash = parseFloat(document.getElementById('h_cash').value) || 0; 
+            let finalBal = (prevBal + totalBill) - cash;
+            
+            document.getElementById('live_h_bill').innerText = totalBill.toFixed(1);
+            document.getElementById('live_h_net').innerText = finalBal.toFixed(1);
+        }
+
+        function calcLivePlant() {
+            let base = parseFloat(document.getElementById('p_base_rate').value) || 0;
+            let weight = parseFloat(document.getElementById('p_weight').value) || 0;
+            let comm = parseFloat(document.getElementById('p_comm').value) || 0;
+            let qty = parseFloat(document.getElementById('p_qty').value) || 0;
+            
+            let newRate = base / 11.8;
+            let standardRate = (newRate * weight) + comm;
+            let grossBill = standardRate * qty;
+            
+            let exp = parseFloat(document.getElementById('p_exp').value) || 0;
+            let advTaken = parseFloat(document.getElementById('p_adv_taken').value) || 0;
+            let payable = grossBill - exp - advTaken;
+            
+            let prevBal = parseFloat(document.getElementById('p_prev_bal').value) || 0;
+            let jama = parseFloat(document.getElementById('p_jama').value) || 0;
+            let finalBal = prevBal + payable - jama;
+            
+            document.getElementById('live_p_payable').innerText = payable.toFixed(2);
+            document.getElementById('live_p_net').innerText = finalBal.toFixed(2);
+        }
+
+        function loadShopData() {
+            let sName = document.getElementById('s_name').value;
+            let savedData = StorageHelper.get('shop_' + sName, {stock: 0, prev: 0, empty: 0});
+            document.getElementById('s_stock').value = savedData.stock;
+            document.getElementById('s_prev').value = savedData.prev;
+            document.getElementById('s_old_empty').value = savedData.empty || 0;
+            calcLiveShop();
+        }
+        function loadHotelData() {
+            let hName = document.getElementById('h_name').value;
+            if(hName) {
+                let savedData = StorageHelper.get('hotel_' + hName, {bal: 0, empty: 0});
+                document.getElementById('h_old_bal').value = savedData.bal;
+                document.getElementById('h_old_empty').value = savedData.empty || 0;
+                calcLiveHotel();
+            }
+        }
+        function loadPlantData() {
+            let savedData = StorageHelper.get('plant_master_data', {bal: 0, empty: 0});
+            document.getElementById('p_prev_bal').value = savedData.bal;
+            document.getElementById('p_old_empty').value = savedData.empty || 0;
+            calcLivePlant();
+        }
+
+        function executeMobilePrint(htmlContent, resetCallback) {
+            try {
+                let printArea = document.getElementById('print-area');
+                if(printArea) {
+                    printArea.innerHTML = htmlContent;
+                    window.print();
+                    
+                    setTimeout(() => { printArea.innerHTML = ''; }, 1000);
+
+                    if(resetCallback) {
+                        setTimeout(() => {
+                            resetCallback();
+                            loadHistoryUI();
+                            alert("✅ بل محفوظ ہو گیا ہے اور نیا ریکارڈ اپڈیٹ ہو گیا ہے!");
+                        }, 500);
+                    }
+                }
+            } catch (e) {
+                alert("Printing Error: " + e.message);
+            }
+        }
+        
+        function getShopData() { 
+            let data = {};
+            data.name = document.getElementById('s_name').value || "گیس شاپ";
+            data.date = document.getElementById('s_date').value;
+            data.rate = parseFloat(document.getElementById('s_rate').value) || 0;
+            data.weight = parseFloat(document.getElementById('s_weight').value) || 1;
+            data.stock = parseFloat(document.getElementById('s_stock').value) || 0;
+            data.load = parseFloat(document.getElementById('s_load').value) || 0;
+            data.sale = parseFloat(document.getElementById('s_sale').value) || 0;
+            data.h_sup = parseFloat(document.getElementById('s_h_sup').value) || 0;
+            
+            data.oldEmpty = parseFloat(document.getElementById('s_old_empty').value) || 0;
+            data.emptyRcv = parseFloat(document.getElementById('s_empty_rcv').value) || 0;
+            data.emptyRcvName = document.getElementById('s_empty_rcv_name').value || '';
+            data.emptySent = parseFloat(document.getElementById('s_empty_sent').value) || 0;
+            
+            data.finalEmpty = data.oldEmpty + data.sale + data.emptyRcv - data.emptySent;
+            data.totalWeight = (data.sale * data.weight).toFixed(1);
+            data.totalSaleCyl = data.sale + data.h_sup;
+            
+            if(data.weight === 1) { data.gross = data.sale * data.rate; } 
+            else { data.gross = data.sale * data.weight * data.rate; }
+            
+            data.expRowsUr = ''; data.expRowsEn = '';
+            data.totalExp = 0;
+            
+            for(let i=1; i<=2; i++) {
+                let nEl = document.getElementById('e'+i+'_n'); let vEl = document.getElementById('e'+i+'_v');
+                if(nEl && vEl) {
+                    let n = nEl.value; let v = parseFloat(vEl.value) || 0;
+                    if(v > 0) { 
+                        data.expRowsUr += `<tr><td>دکان خرچہ: ${n || 'نامعلوم'}</td><td class="text-red">-${fmt(v)}</td></tr>`; 
+                        data.expRowsEn += `<tr><td>Shop Exp: ${n || 'Misc'}</td><td class="text-red">-${fmt(v)}</td></tr>`;
+                        data.totalExp += v; 
+                    }
+                }
+            }
+            for(let i=1; i<=2; i++) {
+                let nEl = document.getElementById('c'+i+'_n'); let vEl = document.getElementById('c'+i+'_v');
+                if(nEl && vEl) {
+                    let n = nEl.value; let v = parseFloat(vEl.value) || 0;
+                    if(v > 0) { 
+                        data.expRowsUr += `<tr><td>کمیٹی: ${n || 'نامعلوم'}</td><td class="text-red">-${fmt(v)}</td></tr>`; 
+                        data.expRowsEn += `<tr><td>Committee: ${n || 'N/A'}</td><td class="text-red">-${fmt(v)}</td></tr>`;
+                        data.totalExp += v; 
+                    }
+                }
+            }
+            for(let i=1; i<=4; i++) {
+                let nEl = document.getElementById('u'+i+'_n'); let kgEl = document.getElementById('u'+i+'_v');
+                if(nEl && kgEl) {
+                    let n = nEl.value; let kg = parseFloat(kgEl.value) || 0; let v = kg * data.rate;
+                    if(kg > 0) { 
+                        data.expRowsUr += `<tr><td>ادھار گیس: ${n || 'نامعلوم'} (<span dir="ltr">${kg} KG</span>)</td><td class="text-red">-${fmt(v)}</td></tr>`; 
+                        data.expRowsEn += `<tr><td>Credit Gas: ${n || 'N/A'} (${kg} KG)</td><td class="text-red">-${fmt(v)}</td></tr>`;
+                        data.totalExp += v; 
+                    }
+                }
+            }
+
+            data.cash = parseFloat(document.getElementById('s_cash_rcv').value) || 0;
+            data.cashName = document.getElementById('s_cash_name').value || '';
+            if(data.cash > 0) {
+                let nameStrUr = data.cashName ? `(${data.cashName})` : ``;
+                let nameStrEn = data.cashName ? `(${data.cashName})` : ``;
+                data.expRowsUr += `<tr><td>نقد رقم وصول کی / نکالی گئی ${nameStrUr}</td><td class="text-red">-${fmt(data.cash)}</td></tr>`; 
+                data.expRowsEn += `<tr><td>Cash Withdrawn/Taken ${nameStrEn}</td><td class="text-red">-${fmt(data.cash)}</td></tr>`;
+                data.totalExp += data.cash;
+            }
+            
+            data.jama = parseFloat(document.getElementById('s_jama').value) || 0;
+            data.jamaName = document.getElementById('s_jama_name').value || '';
+            data.prev = parseFloat(document.getElementById('s_prev').value) || 0;
+            data.availableCash = data.gross; 
+            data.netRemaining = data.availableCash - data.totalExp;
+            data.remainingStock = data.stock + data.load - data.totalSaleCyl;
+            data.finalBal = data.prev + data.netRemaining - data.jama;
+            return data;
+        }
+
+        function printShopUrdu() {
+            let d = getShopData();
+            if(d.expRowsUr === '') d.expRowsUr = `<tr><td>کوئی کٹوتی نہیں</td><td class="text-red">0</td></tr>`;
+            let weightText = (d.weight === 1) ? "ڈائریکٹ" : `<span dir="ltr">${d.totalWeight} KG</span>`;
+            let emptyNameText = d.emptyRcvName ? ` (${d.emptyRcvName})` : ``;
+            let jamaTitle = d.jamaName ? `رقم جمع کروائی (${d.jamaName}) (-)` : `رقم جمع کروائی (-)`;
+
+            let html = `
+                <div class="p-ur">
+                    <div class="print-header">
+                        <h1 class="ur-bold">${d.name}</h1>
+                        <p class="ur">روزانہ کا حساب کتاب اور اسٹاک رپورٹ</p>
+                    </div>
+                    
+                    <div class="print-meta ur">
+                        <div><strong>ریٹ:</strong> <span class="badge-yellow">${d.rate} روپے</span></div>
+                        <div><strong>تاریخ:</strong> <span class="badge-yellow" dir="ltr">${d.date}</span></div>
+                    </div>
+                    
+                    <div class="print-sec-title ur">1. گیس سلنڈر (اسٹاک) کی تفصیل</div>
+                    <table class="print-table tbl-2col ur">
+                        <tr><th>تفصیل</th><th>تعداد</th></tr>
+                        <tr><td>پہلے سے موجود اسٹاک</td><td>${d.stock}</td></tr>
+                        <tr><td>نیا لوڈ</td><td>${d.load}</td></tr>
+                        <tr><td>دکان کی سیل (فروخت)</td><td class="text-red">-${d.sale}</td></tr>
+                        <tr><td>ہوٹل / دیگر سپلائی</td><td class="text-red">-${d.h_sup}</td></tr>
+                        <tr style="background-color:#eff6ff !important;"><td class="text-blue">بقیہ اسٹاک (بھرے ہوئے)</td><td class="text-blue">${d.remainingStock}</td></tr>
+                    </table>
+
+                    <div class="print-sec-title ur">2. خالی سلنڈروں کی تفصیل</div>
+                    <table class="print-table tbl-2col ur">
+                        <tr><th>تفصیل</th><th>تعداد</th></tr>
+                        <tr><td>پہلے سے موجود خالی</td><td>${d.oldEmpty}</td></tr>
+                        <tr><td>دکان کی سیل سے آئے (نئے خالی)</td><td class="text-blue">+${d.sale}</td></tr>
+                        <tr><td>مزید وصول کیے${emptyNameText}</td><td class="text-blue">+${d.emptyRcv}</td></tr>
+                        <tr><td>پلانٹ کو بھیجے</td><td class="text-red">-${d.emptySent}</td></tr>
+                        <tr style="background-color:#eff6ff !important;"><td class="text-blue">دکان پر موجود بقیہ خالی</td><td class="text-blue">${d.finalEmpty}</td></tr>
+                    </table>
+                    
+                    <div class="print-sec-title ur">3. مالی حساب کتاب (کیش)</div>
+                    <table class="print-table tbl-2col ur">
+                        <tr><th>تفصیل</th><th>رقم</th></tr>
+                        <tr style="background-color:#f0fdf4 !important;"><td class="text-green">گراس سیل (${weightText}) / کل کیش</td><td class="text-green">${fmt(d.gross)}</td></tr>
+                        <tr><td colspan="2" style="text-align:center; background:#fee2e2 !important; color:#b91c1c; font-weight:bold;">منہا (-) اخراجات ، ادھار اور وصولی</td></tr>
+                        ${d.expRowsUr}
+                        <tr><td class="text-red">کل کٹوتی</td><td class="text-red">-${fmt(d.totalExp)}</td></tr>
+                        <tr style="background-color:#fef9c3 !important;"><td style="font-weight:bold;">کٹوتی کے بعد باقی رقم</td><td style="font-weight:bold;">${fmt(d.netRemaining)}</td></tr>
+                        <tr><td>${jamaTitle}</td><td class="text-red">-${fmt(d.jama)}</td></tr>
+                    </table>
+                    
+                    <div class="print-summary ur">
+                        <div class="print-summary-row"><div>آج کا خالص حساب:</div><div>${fmt(d.netRemaining - d.jama)}</div></div>
+                        <div class="print-summary-row"><div>پچھلا بقایا:</div><div>+ ${fmt(d.prev)}</div></div>
+                        <div class="print-summary-total"><div>فائنل کل بقایا:</div><div>${fmt(d.finalBal)}</div></div>
+                        
+                        <div style="display:flex; justify-content:space-between; margin-top:15px; border-top:2px solid #1e3a8a; padding-top:15px; font-weight:bold; font-size:24px; color:#1e3a8a;">
+                            <span><span class="p-ur-circle">1</span> بقیہ بھرے ہوئے: ${d.remainingStock}</span>
+                            <span><span class="p-ur-circle" style="background:#64748b;">2</span> بقیہ خالی: ${d.finalEmpty}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            StorageHelper.set('shop_' + d.name, { stock: d.remainingStock, prev: d.finalBal, empty: d.finalEmpty });
+            saveToHistory('shop', d.name, d.date, html, d.finalBal);
+            
+            executeMobilePrint(html, function() {
+                clearShopInputs();
+                loadShopData();
+            });
+        }
+
+        function printShopEnglish() {
+            let d = getShopData();
+            if(d.expRowsEn === '') d.expRowsEn = `<tr><td>No Deductions</td><td class="text-red">0</td></tr>`;
+            let sSelect = document.getElementById('s_name');
+            let engName = sSelect.options[sSelect.selectedIndex].text || d.name; 
+            let weightText = (d.weight === 1) ? "Direct" : `${d.totalWeight} KG`;
+            let emptyNameText = d.emptyRcvName ? ` (${d.emptyRcvName})` : ``;
+            let jamaTitle = d.jamaName ? `Amount Deposited (-) (${d.jamaName})` : `Amount Deposited (-)`;
+
+            let html = `
+                <div class="p-en">
+                    <div class="print-header">
+                        <div>
+                            <h1>${engName}</h1>
+                            <p>Daily Shop Ledger & Inventory Report</p>
+                        </div>
+                        <div class="p-en-htitle">SHOP LEDGER</div>
+                    </div>
+                    
+                    <div class="print-meta">
+                        <div>DATE: <span class="badge-yellow">${d.date}</span></div>
+                        <div>UNIT RATE: <span class="badge-yellow">Rs. ${d.rate}</span></div>
+                    </div>
+                    
+                    <div class="print-sec-title">1. FILLED CYLINDER INVENTORY</div>
+                    <table class="print-table tbl-2col">
+                        <tr><th>Description</th><th>Quantity</th></tr>
+                        <tr><td>Opening Stock</td><td>${d.stock}</td></tr>
+                        <tr><td>New Load Received</td><td>${d.load}</td></tr>
+                        <tr><td>Shop Sale (Direct)</td><td class="text-red">-${d.sale}</td></tr>
+                        <tr><td>Hotel / Other Supply</td><td class="text-red">-${d.h_sup}</td></tr>
+                        <tr style="background-color:#eff6ff !important;"><td class="text-blue">Closing Stock (Filled)</td><td class="text-blue">${d.remainingStock}</td></tr>
+                    </table>
+
+                    <div class="print-sec-title">2. EMPTY CYLINDER INVENTORY</div>
+                    <table class="print-table tbl-2col">
+                        <tr><th>Description</th><th>Quantity</th></tr>
+                        <tr><td>Previous Empty Stock</td><td>${d.oldEmpty}</td></tr>
+                        <tr><td>Empty from Shop Sale (Auto)</td><td class="text-blue">+${d.sale}</td></tr>
+                        <tr><td>Empty Received More${emptyNameText}</td><td class="text-blue">+${d.emptyRcv}</td></tr>
+                        <tr><td>Empty Sent to Plant</td><td class="text-red">-${d.emptySent}</td></tr>
+                        <tr style="background-color:#eff6ff !important;"><td class="text-blue">Closing Empty Stock</td><td class="text-blue">${d.finalEmpty}</td></tr>
+                    </table>
+
+                    <div class="print-sec-title">3. FINANCIAL LEDGER (CASH & EXPENSES)</div>
+                    <table class="print-table tbl-2col">
+                        <tr><th>Description</th><th>Amount</th></tr>
+                        <tr style="background-color:#f0fdf4 !important;"><td class="text-green">Gross Sales (${weightText})</td><td class="text-green">${fmt(d.gross)}</td></tr>
+                        <tr><td colspan="2" style="text-align:center; background:#fee2e2 !important; color:#b91c1c; font-weight:bold;">Less (-) Expenses, Credit & Withdrawals</td></tr>
+                        ${d.expRowsEn}
+                        <tr><td class="text-red">Total Deductions</td><td class="text-red">-${fmt(d.totalExp)}</td></tr>
+                        <tr style="background-color:#fef9c3 !important;"><td style="font-weight:bold;">Remaining Cash After Deductions</td><td style="font-weight:bold;">${fmt(d.netRemaining)}</td></tr>
+                        <tr><td>${jamaTitle}</td><td class="text-red">-${fmt(d.jama)}</td></tr>
+                    </table>
+
+                    <div class="print-summary">
+                        <div class="print-summary-row"><div>Today's Net Balance:</div><div>${fmt(d.netRemaining - d.jama)}</div></div>
+                        <div class="print-summary-row"><div>Previous Balance:</div><div>+ ${fmt(d.prev)}</div></div>
+                        <div class="print-summary-total"><div>FINAL CLOSING BALANCE:</div><div>${fmt(d.finalBal)}</div></div>
+                        
+                        <div style="display:flex; justify-content:space-between; margin-top:15px; border-top:2px solid #1e3a8a; padding-top:15px; font-weight:bold; font-size:16px; color:#1e3a8a;">
+                            <span>Closing Filled Stock: ${d.remainingStock}</span>
+                            <span>Closing Empty Stock: ${d.finalEmpty}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            StorageHelper.set('shop_' + d.name, { stock: d.remainingStock, prev: d.finalBal, empty: d.finalEmpty });
+            saveToHistory('shop', engName, d.date, html, d.finalBal);
+            
+            executeMobilePrint(html, function() {
+                clearShopInputs();
+                loadShopData(); 
+            });
+        }
+
+        function getHotelData() {
+            let d = {};
+            d.name = document.getElementById('h_name').value || 'Unknown Hotel';
+            d.date = document.getElementById('h_date').value;
+            d.rate = parseFloat(document.getElementById('h_rate').value) || 0;
+            d.weight = parseFloat(document.getElementById('h_weight').value) || 1;
+            d.supply = parseFloat(document.getElementById('h_supply').value) || 0;
+            d.oldEmpty = parseFloat(document.getElementById('h_old_empty').value) || 0;
+            d.emptyRcv = parseFloat(document.getElementById('h_empty_rcv').value) || 0;
+            d.emptyRcvName = document.getElementById('h_empty_rcv_name').value || '';
+            d.prev = parseFloat(document.getElementById('h_old_bal').value) || 0;
+            d.cash = parseFloat(document.getElementById('h_cash').value) || 0;
+            d.cashName = document.getElementById('h_cash_name').value || '';
+            d.udharQty = parseFloat(document.getElementById('h_udhar').value) || 0;
+            d.returnQty = parseFloat(document.getElementById('h_return').value) || 0;
+            
+            d.udharGasAmt = d.udharQty * d.rate;
+            d.returnGasAmt = d.returnQty * d.rate;
+            d.grossBill = d.supply * d.weight * d.rate;
+            if(d.weight === 1) d.grossBill = d.supply * d.rate;
+
+            d.todayBill = d.grossBill + d.udharGasAmt - d.returnGasAmt;
+            d.finalEmpty = (d.oldEmpty + d.supply) - d.emptyRcv;
+            d.finalBal = (d.prev + d.todayBill) - d.cash;
+            d.weightText = (d.weight === 1) ? "ڈائریکٹ" : `<span dir="ltr">${(d.supply * d.weight).toFixed(1)} KG</span>`;
+            d.weightTextEn = (d.weight === 1) ? "Direct" : `${(d.supply * d.weight).toFixed(1)} KG`;
+            return d;
+        }
+
+        function printHotelUrdu() {
+            let d = getHotelData();
+            let cashTitle = d.cashName ? `نقد وصول کیا / جمع کروایا (${d.cashName}) (-)` : `نقد وصول کیا / جمع کروایا (-)`;
+            let emptyNameText = d.emptyRcvName ? ` (${d.emptyRcvName})` : ``;
+
+            let html = `
+                <div class="p-ur">
+                    <div class="print-header">
+                        <h1 class="ur-bold">${d.name}</h1>
+                        <p class="ur">ہوٹل سپلائی کا حساب کتاب</p>
+                    </div>
+                    
+                    <div class="print-meta ur">
+                        <div><strong>ریٹ:</strong> <span class="badge-yellow">${d.rate} روپے</span></div>
+                        <div><strong>تاریخ:</strong> <span class="badge-yellow" dir="ltr">${d.date}</span></div>
+                    </div>
+                    
+                    <div class="print-sec-title ur">1. خالی سلنڈر کی تفصیل</div>
+                    <table class="print-table tbl-2col ur">
+                        <tr><th>تفصیل</th><th>تعداد</th></tr>
+                        <tr><td>پہلے سے موجود خالی</td><td>${d.oldEmpty}</td></tr>
+                        <tr><td>آج ہوٹل کو دیے گئے (نئے)</td><td class="text-blue">+${d.supply}</td></tr>
+                        <tr><td>خالی واپس وصول کیے (مائنس)${emptyNameText}</td><td class="text-red">-${d.emptyRcv}</td></tr>
+                        <tr style="background-color:#eff6ff !important;"><td class="text-blue">ہوٹل پر بقیہ خالی سلنڈر</td><td class="text-blue">${d.finalEmpty}</td></tr>
+                    </table>
+                    
+                    <div class="print-sec-title ur">2. بل اور بقایا جات کی تفصیل</div>
+                    <table class="print-table tbl-2col ur">
+                        <tr><th>تفصیل</th><th>رقم</th></tr>
+                        <tr style="background-color:#f0fdf4 !important;"><td class="text-green">آج کی سپلائی کا بل (${d.weightText})</td><td class="text-green">${fmt(d.grossBill)}</td></tr>
+                        <tr><td>ادھار گیس (<span dir="ltr">${d.udharQty} KG</span> × ${d.rate})</td><td class="text-blue">+${fmt(d.udharGasAmt)}</td></tr>
+                        <tr><td>واپسی گیس کٹوتی (<span dir="ltr">${d.returnQty} KG</span> × ${d.rate})</td><td class="text-red">-${fmt(d.returnGasAmt)}</td></tr>
+                        <tr style="background-color:#e0f2fe !important;"><td class="text-blue">آج کا ٹوٹل فائنل بل</td><td class="text-blue">${fmt(d.todayBill)}</td></tr>
+                        <tr><td>پچھلا بقایا</td><td>${fmt(d.prev)}</td></tr>
+                        <tr><td>${cashTitle}</td><td class="text-red">-${fmt(d.cash)}</td></tr>
+                    </table>
+                    
+                    <div class="print-summary ur">
+                        <div class="print-summary-row"><div>آج کا ٹوٹل بل:</div><div>${fmt(d.todayBill)}</div></div>
+                        <div class="print-summary-row"><div>پچھلا بقایا:</div><div>+ ${fmt(d.prev)}</div></div>
+                        <div class="print-summary-row text-red"><div>نقد وصول کیا / جمع (-):</div><div>- ${fmt(d.cash)}</div></div>
+                        <div class="print-summary-total"><div>فائنل کل بقایا:</div><div>${fmt(d.finalBal)}</div></div>
+                    </div>
+                </div>
+            `;
+            StorageHelper.set('hotel_' + d.name, { bal: d.finalBal, empty: d.finalEmpty });
+            saveToHistory('hotel', d.name, d.date, html, d.finalBal);
+            
+            executeMobilePrint(html, function() {
+                clearHotelInputs();
+                loadHotelData();
+            });
+        }
+
+        function printHotelEnglish() {
+            let d = getHotelData();
+            let cashTitle = d.cashName ? `Cash Received (-) (${d.cashName})` : `Cash Received (-)`;
+            let emptyNameText = d.emptyRcvName ? ` (${d.emptyRcvName})` : ``;
+
+            let html = `
+                <div class="p-en">
+                    <div class="print-header">
+                        <div><h1>${d.name}</h1><p>Commercial Hotel Supply Ledger</p></div>
+                        <div class="p-en-htitle">HOTEL LEDGER</div>
+                    </div>
+                    
+                    <div class="print-meta">
+                        <div>DATE: <span class="badge-yellow">${d.date}</span></div>
+                        <div>CYLINDER RATE: <span class="badge-yellow">Rs. ${d.rate}</span></div>
+                    </div>
+                    
+                    <div class="print-sec-title">1. CYLINDER INVENTORY STATUS</div>
+                    <table class="print-table tbl-2col">
+                        <tr><th>Description</th><th>Quantity</th></tr>
+                        <tr><td>Previous Empty at Hotel</td><td>${d.oldEmpty}</td></tr>
+                        <tr><td>Supplied Today</td><td class="text-blue">+${d.supply}</td></tr>
+                        <tr><td>Empty Received Back${emptyNameText}</td><td class="text-red">-${d.emptyRcv}</td></tr>
+                        <tr style="background-color:#eff6ff !important;"><td class="text-blue">Pending Empty at Hotel</td><td class="text-blue">${d.finalEmpty} Cylinders</td></tr>
+                    </table>
+
+                    <div class="print-sec-title">2. ACCOUNT RECONCILIATION</div>
+                    <table class="print-table tbl-2col">
+                        <tr><th>Description</th><th>Amount</th></tr>
+                        <tr style="background-color:#f0fdf4 !important;"><td class="text-green">Today's Supply Gross Bill (${d.weightTextEn})</td><td class="text-green">${fmt(d.grossBill)}</td></tr>
+                        <tr><td>Credit Gas (${d.udharQty} @ Rs.${d.rate})</td><td class="text-blue">+${fmt(d.udharGasAmt)}</td></tr>
+                        <tr><td>Return Gas Deduction (${d.returnQty} @ Rs.${d.rate})</td><td class="text-red">-${fmt(d.returnGasAmt)}</td></tr>
+                        <tr style="background-color:#e0f2fe !important;"><td class="text-blue">Today's Net Bill</td><td class="text-blue">${fmt(d.todayBill)}</td></tr>
+                        <tr><td>Previous Balance</td><td>${fmt(d.prev)}</td></tr>
+                        <tr><td>${cashTitle}</td><td class="text-red">-${fmt(d.cash)}</td></tr>
+                    </table>
+
+                    <div class="print-summary">
+                        <div class="print-summary-row"><div>Today's Net Bill:</div><div>${fmt(d.todayBill)}</div></div>
+                        <div class="print-summary-row"><div>Previous Balance:</div><div>+ ${fmt(d.prev)}</div></div>
+                        <div class="print-summary-row text-red"><div>Total Cash Paid (-):</div><div>- ${fmt(d.cash)}</div></div>
+                        <div class="print-summary-total"><div>TOTAL PENDING BALANCE:</div><div>${fmt(d.finalBal)}</div></div>
+                    </div>
+                </div>
+            `;
+            StorageHelper.set('hotel_' + d.name, { bal: d.finalBal, empty: d.finalEmpty });
+            saveToHistory('hotel', d.name, d.date, html, d.finalBal);
+            
+            executeMobilePrint(html, function() {
+                clearHotelInputs();
+                loadHotelData();
+            });
+        }
+
+        function getPlantData() {
+            let d = {};
+            d.date = document.getElementById('p_date').value;
+            d.base = parseFloat(document.getElementById('p_base_rate').value) || 0;
+            d.weight = parseFloat(document.getElementById('p_weight').value) || 0;
+            d.comm = parseFloat(document.getElementById('p_comm').value) || 0;
+            d.qty = parseFloat(document.getElementById('p_qty').value) || 0;
+            d.exp = parseFloat(document.getElementById('p_exp').value) || 0;
+            d.adv = parseFloat(document.getElementById('p_adv_taken').value) || 0;
+            d.prevBal = parseFloat(document.getElementById('p_prev_bal').value) || 0;
+            d.jama = parseFloat(document.getElementById('p_jama').value) || 0;
+            d.jamaName = document.getElementById('p_jama_name').value || "";
+
+            d.oldEmpty = parseFloat(document.getElementById('p_old_empty').value) || 0;
+            d.emptySent = parseFloat(document.getElementById('p_empty_sent').value) || 0;
+            d.emptyRcv = parseFloat(document.getElementById('p_empty_rcv').value) || 0;
+            d.emptyRcvName = document.getElementById('p_empty_rcv_name').value || '';
+            d.finalEmpty = d.oldEmpty + d.emptySent - d.emptyRcv;
+
+            d.newRate = d.base / 11.8;
+            d.commWeight = d.newRate * d.weight;
+            d.standardRate = d.commWeight + d.comm;
+            d.grossBill = d.standardRate * d.qty;
+            d.payable = d.grossBill - d.exp - d.adv;
+            d.finalBal = d.prevBal + d.payable - d.jama;
+            
+            let shopName = document.getElementById('ps_n').value;
+            let shopQty = parseFloat(document.getElementById('ps_q').value) || 0;
+            
+            if(shopName || shopQty > 0) {
+                d.psRowsUr = `<tr><td>${shopName || 'نامعلوم دکان'}</td><td class="text-blue">${shopQty}</td></tr>`;
+                d.psRowsEn = `<tr><td>${shopName || 'Unknown Shop'}</td><td class="text-blue">${shopQty}</td></tr>`;
+            } else {
+                d.psRowsUr = `<tr><td colspan="2" style="text-align:center;">کوئی شاپ شامل نہیں کی گئی</td></tr>`;
+                d.psRowsEn = `<tr><td colspan="2" style="text-align:center;">No shops added today</td></tr>`;
+            }
+            return d;
+        }
+
+        function printPlantUrdu() {
+            let d = getPlantData();
+            let jamaTitle = d.jamaName ? `رقم جمع کروائی (${d.jamaName}) (-)` : `رقم جمع کروائی (-)`;
+            let emptyNameText = d.emptyRcvName ? ` (${d.emptyRcvName})` : ``;
+
+            let html = `
+                <div class="p-ur">
+                    <div class="print-header">
+                        <h1 class="ur-bold">کمپنی / مین پلانٹ لیجر</h1>
+                        <p class="ur">مکمل مالی حساب اور دکانوں کی سپلائی</p>
+                    </div>
+                    
+                    <div class="print-meta ur">
+                        <div><strong>بیس ریٹ:</strong> <span class="badge-yellow">${d.base} روپے</span></div>
+                        <div><strong>تاریخ:</strong> <span class="badge-yellow" dir="ltr">${d.date}</span></div>
+                    </div>
+                    
+                    <div class="print-sec-title ur">1. ریٹ کا فارمولا اور بل</div>
+                    <table class="print-table tbl-2col ur">
+                        <tr><th>تفصیل</th><th>رقم</th></tr>
+                        <tr><td>نیا پلانٹ ریٹ (${d.base} ÷ 11.8)</td><td style="direction:ltr;">${d.newRate.toFixed(2)}</td></tr>
+                        <tr><td>وزن کے حساب سے (${d.newRate.toFixed(2)} × <span dir="ltr">${d.weight} KG</span>)</td><td>${fmt(d.commWeight)}</td></tr>
+                        <tr><td>اضافی چارجز / کمیشن (+)</td><td class="text-green">${fmt(d.comm)}</td></tr>
+                        <tr style="background-color:#e0f2fe !important;"><td class="text-blue">ایک سلنڈر کا فائنل ریٹ</td><td class="text-blue">${fmt(d.standardRate)}</td></tr>
+                        <tr style="background-color:#f0fdf4 !important;"><td class="text-green">آج کا کل گراس بل (${d.qty} سلنڈر)</td><td class="text-green">${fmt(d.grossBill)}</td></tr>
+                    </table>
+
+                    <div class="print-sec-title ur">2. پلانٹ کے خالی سلنڈروں کا حساب</div>
+                    <table class="print-table tbl-2col ur">
+                        <tr><th>تفصیل</th><th>تعداد</th></tr>
+                        <tr><td>پہلے سے پلانٹ کے پاس خالی</td><td>${d.oldEmpty}</td></tr>
+                        <tr><td>آج پلانٹ کو بھیجے گئے</td><td class="text-blue">+${d.emptySent}</td></tr>
+                        <tr><td>پلانٹ سے واپس آئے (-)${emptyNameText}</td><td class="text-red">-${d.emptyRcv}</td></tr>
+                        <tr style="background-color:#eff6ff !important;"><td class="text-blue">پلانٹ کے پاس بقیہ خالی</td><td class="text-blue">${d.finalEmpty}</td></tr>
+                    </table>
+
+                    <div class="print-sec-title ur">3. دکان کی سپلائی (تفصیل)</div>
+                    <table class="print-table tbl-2col ur">
+                        <tr><th>شاپ کا نام</th><th>دیے گئے سلنڈر</th></tr>
+                        ${d.psRowsUr}
+                    </table>
+                    
+                    <div class="print-sec-title ur">4. حتمی مالی حساب (جمع اور بقایا)</div>
+                    <table class="print-table tbl-2col ur">
+                        <tr><th>تفصیل</th><th>رقم</th></tr>
+                        <tr><td>متفرق خرچہ (Expense)</td><td class="text-red">-${fmt(d.exp)}</td></tr>
+                        <tr><td>ایڈوانس لی گئی رقم</td><td class="text-red">-${fmt(d.adv)}</td></tr>
+                        <tr style="background-color:#fee2e2 !important;"><td style="color:#b91c1c; font-weight:bold;">آج کا خالص قابل ادا بل</td><td style="color:#b91c1c; font-weight:bold;">${fmt(d.payable)}</td></tr>
+                        <tr><td>پچھلا بقایا کھاتہ</td><td>+${fmt(d.prevBal)}</td></tr>
+                        <tr><td>${jamaTitle}</td><td class="text-red">-${fmt(d.jama)}</td></tr>
+                    </table>
+
+                    <div class="print-summary ur">
+                        <div class="print-summary-row"><div>آج کا قابل ادا بل:</div><div>${fmt(d.payable)}</div></div>
+                        <div class="print-summary-row"><div>پچھلا بقایا کھاتہ:</div><div>+ ${fmt(d.prevBal)}</div></div>
+                        <div class="print-summary-total"><div>فائنل کل بقایا:</div><div>${fmt(d.finalBal)}</div></div>
+                    </div>
+                </div>
+            `;
+            StorageHelper.set('plant_master_data', { bal: d.finalBal, empty: d.finalEmpty });
+            saveToHistory('plant', 'مین پلانٹ لیجر', d.date, html, d.finalBal);
+            
+            executeMobilePrint(html, function() {
+                clearPlantInputs();
+                loadPlantData();
+            });
+        }
+
+        function printPlantEnglish() {
+            let d = getPlantData();
+            let emptyNameText = d.emptyRcvName ? ` (${d.emptyRcvName})` : ``;
+            let html = `
+                <div class="p-en">
+                    <div class="print-header">
+                        <div><h1>MAIN PLANT</h1><p>Authorized Commercial Supplier Ledger</p></div>
+                        <div class="p-en-htitle">COMPANY LEDGER</div>
+                    </div>
+                    
+                    <div class="print-meta">
+                        <div>DATE: <span class="badge-yellow">${d.date}</span></div>
+                        <div>PLANT BASE RATE: <span class="badge-yellow">Rs. ${fmt(d.base)}</span></div>
+                    </div>
+                    
+                    <div class="print-sec-title">1. RATE SETUP & BULK ORDER</div>
+                    <table class="print-table tbl-2col">
+                        <tr><th>CALCULATION STAGE</th><th>AMOUNT</th></tr>
+                        <tr><td>New Plant Rate (${d.base} ÷ 11.8)</td><td>${d.newRate.toFixed(2)}</td></tr>
+                        <tr><td>Weight Factor (${d.newRate.toFixed(2)} × ${d.weight} KG)</td><td>${fmt(d.commWeight)}</td></tr>
+                        <tr><td>Plus Extra Charges / Logistics</td><td class="text-green">+ ${fmt(d.comm)}</td></tr>
+                        <tr style="background-color:#e0f2fe !important;"><td class="text-blue">Standard Commercial Rate</td><td class="text-blue">${fmt(d.standardRate)}</td></tr>
+                        <tr style="background-color:#f0fdf4 !important;"><td class="text-green">Total Gross Bill (${d.qty} Cylinders)</td><td class="text-green">${fmt(d.grossBill)}</td></tr>
+                    </table>
+
+                    <div class="print-sec-title">2. EMPTY CYLINDER LEDGER</div>
+                    <table class="print-table tbl-2col">
+                        <tr><th>Description</th><th>Quantity</th></tr>
+                        <tr><td>Previous Empties at Plant</td><td>${d.oldEmpty}</td></tr>
+                        <tr><td>Empties Sent to Plant Today</td><td class="text-blue">+${d.emptySent}</td></tr>
+                        <tr><td>Empties Returned by Plant${emptyNameText}</td><td class="text-red">-${d.emptyRcv}</td></tr>
+                        <tr style="background-color:#eff6ff !important;"><td class="text-blue">Pending Empties at Plant</td><td class="text-blue">${d.finalEmpty}</td></tr>
+                    </table>
+                    
+                    <div class="print-sec-title">3. SHOP DISTRIBUTION</div>
+                    <table class="print-table tbl-2col">
+                        <tr><th>Shop Name</th><th>Cylinders Supplied</th></tr>
+                        ${d.psRowsEn}
+                    </table>
+                    
+                    <div class="print-sec-title">4. CLOSING ACCOUNT STATEMENT</div>
+                    <table class="print-table tbl-2col">
+                        <tr><th>Description</th><th>Amount</th></tr>
+                        <tr><td>Miscellaneous Expenses (-)</td><td class="text-red">-${fmt(d.exp)}</td></tr>
+                        <tr><td>Advance Taken (-)</td><td class="text-red">-${fmt(d.adv)}</td></tr>
+                        <tr style="background-color:#fee2e2 !important;"><td style="color:#b91c1c; font-weight:bold;">TODAY'S NET PAYABLE</td><td style="color:#b91c1c; font-weight:bold;">${fmt(d.payable)}</td></tr>
+                        <tr><td>Previous Balance</td><td>+${fmt(d.prevBal)}</td></tr>
+                        <tr><td>Jama Raqam Deposited (-) (${d.jamaName})</td><td class="text-red">-${fmt(d.jama)}</td></tr>
+                    </table>
+
+                    <div class="print-summary">
+                        <div class="print-summary-row"><div>Today's Net Payable:</div><div>${fmt(d.payable)}</div></div>
+                        <div class="print-summary-row"><div>Previous Balance:</div><div>+ ${fmt(d.prevBal)}</div></div>
+                        <div class="print-summary-total"><div>FINAL PENDING BALANCE:</div><div>${fmt(d.finalBal)}</div></div>
+                    </div>
+                </div>
+            `;
+            StorageHelper.set('plant_master_data', { bal: d.finalBal, empty: d.finalEmpty });
+            saveToHistory('plant', 'Company Ledger', d.date, html, d.finalBal);
+            
+            executeMobilePrint(html, function() {
+                clearPlantInputs();
+                loadPlantData();
+            });
+        }
+
+        window.onload = function() {
+            syncFromFirebase(); 
+            loadShopData();
+            loadHotelData();
+            loadPlantData();
+            loadHistoryUI();
+        };
+    </script>
+</body>
+</html>
